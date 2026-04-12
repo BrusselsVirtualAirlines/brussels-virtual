@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Brussels Virtual" />
+  <meta name="theme-color" content="#060c18" />
+  <title>Brussels Virtual</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+    /* ── RESET & BASE ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; background: #0b1120; font-family: 'Barlow', sans-serif; color: #fff; overscroll-behavior: none; }
+
+    /* ── PHONE SHELL ── */
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #0b1120;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: #060c18;
+      padding: env(safe-area-inset-top, 12px) 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #1a2540;
+      flex-shrink: 0;
+    }
+    .bv-logo { width: 38px; height: 38px; border-radius: 9px; overflow: hidden; flex-shrink: 0; }
+    .bv-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .header-text { flex: 1; }
+    .header-text h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; }
+    .header-text p { font-family: 'Barlow Condensed', sans-serif; color: #4a7abf; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+    .header-dot { width: 7px; height: 7px; background: #c0392b; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── SCREENS ── */
+    .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── ATLAS SCREEN ── */
+    .atlas-top { text-align: center; margin-bottom: 18px; padding-top: 8px; }
+    .atlas-top-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
+    .atlas-top-sub { font-family: 'Barlow Condensed', sans-serif; color: #4a6fa5; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+    .atlas-card { background: #111d35; border: 1px solid #1e2d4a; border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+    .atlas-card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+    .field-label { font-family: 'Barlow Condensed', sans-serif; color: #4a6fa5; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: block; }
+    .field-input { width: 100%; background: #0b1120; border: 1px solid #1e2d4a; border-radius: 9px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: 'Barlow', sans-serif; margin-bottom: 12px; outline: none; -webkit-appearance: none; }
+    .field-input::placeholder { color: #2a4060; }
+    .forgot { text-align: right; margin-top: -8px; margin-bottom: 14px; }
+    .forgot a { color: #4a6fa5; font-size: 11px; text-decoration: none; }
+    .btn-primary { width: 100%; padding: 12px; background: #1a56c4; color: #fff; border: none; border-radius: 9px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; margin-bottom: 14px; }
+    .divider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .divider-line { flex: 1; height: 1px; background: #1e2d4a; }
+    .divider-text { font-family: 'Barlow Condensed', sans-serif; color: #2a4060; font-size: 11px; letter-spacing: 1px; }
+    .btn-discord { width: 100%; padding: 12px; background: #1a56c4; color: #fff; border: none; border-radius: 9px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .discord-svg { width: 18px; height: 14px; fill: #fff; flex-shrink: 0; }
+    .atlas-signup { text-align: center; color: #2a4060; font-size: 12px; margin-top: 10px; }
+    .atlas-signup a { color: #4a9eff; text-decoration: none; font-weight: 600; }
+
+    /* ── NEWS SCREEN ── */
+    .live-badge { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+    .live-dot { width: 6px; height: 6px; background: #3aad6e; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .live-text { font-family: 'Barlow Condensed', sans-serif; color: #3aad6e; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .live-sub { font-family: 'Barlow Condensed', sans-serif; color: #2a4060; font-size: 11px; margin-left: auto; }
+
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { padding: 5px 12px; border-radius: 100px; border: 1px solid #1e2d4a; background: #111d35; color: #4a6fa5; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; flex-shrink: 0; }
+    .filter-btn.active { background: #1a3a6e; border-color: #1a56c4; color: #fff; }
+
+    .news-item { background: #111d35; border: 1px solid #1e2d4a; border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    .news-item.hidden { display: none; }
+    .news-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .news-tag { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.8px; flex-shrink: 0; border: none; }
+    .tag-announcement { background: #2a0a0a; color: #c0392b; }
+    .tag-event       { background: #0f2044; color: #4a9eff; }
+    .tag-ifnews      { background: #0f2a1a; color: #3aad6e; }
+    .news-channel { font-family: 'Barlow Condensed', sans-serif; color: #2a4060; font-size: 10px; margin-left: auto; }
+    .news-channel span { color: #404eed; }
+    .news-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+    .news-body { color: #4a6fa5; font-size: 12px; line-height: 1.5; margin-bottom: 10px; white-space: pre-wrap; }
+    .news-footer { display: flex; align-items: center; gap: 6px; }
+    .news-avatar { width: 20px; height: 20px; border-radius: 50%; background: #1a3a6e; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: 700; color: #4a9eff; flex-shrink: 0; }
+    .news-meta { font-family: 'Barlow Condensed', sans-serif; color: #2a4060; font-size: 11px; }
+
+    .news-loading { text-align: center; color: #2a4060; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; padding: 32px 0; letter-spacing: 0.5px; }
+    .news-empty { text-align: center; color: #2a4060; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; padding: 32px 0; }
+
+    /* ── INFO SCREEN ── */
+    .section-title { font-family: 'Barlow Condensed', sans-serif; color: #4a6fa5; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; font-weight: 600; }
+    .section-title.red { color: #c0392b; }
+    .staff-card { background: #111d35; border: 1px solid #1e2d4a; border-radius: 14px; padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+    .staff-avatar { width: 40px; height: 40px; border-radius: 10px; background: #1a3a6e; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; color: #4a9eff; flex-shrink: 0; }
+    .staff-avatar.ceo { background: #1a0c0c; color: #c0392b; border: 1px solid #6e1a1a; }
+    .staff-info { flex: 1; }
+    .staff-name { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 1px; }
+    .staff-role-short { font-family: 'Barlow Condensed', sans-serif; color: #c0392b; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+    .staff-role-long { font-family: 'Barlow Condensed', sans-serif; color: #4a6fa5; font-size: 11px; }
+    .rank-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 10px; margin-bottom: 6px; border: 1px solid #1e2d4a; background: #111d35; }
+    .rank-name { font-family: 'Barlow Condensed', sans-serif; flex: 1; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+    .rank-badge { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; background: #0f2044; color: #4a9eff; white-space: nowrap; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      background: #060c18;
+      border-top: 1px solid #1a2540;
+      display: flex;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      flex-shrink: 0;
+    }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 6px 10px; cursor: pointer; background: none; border: none; }
+    .nav-dot { width: 6px; height: 6px; background: #c0392b; border-radius: 50%; margin-bottom: 2px; }
+    .nav-btn:not(.active) .nav-dot { opacity: 0; }
+    .nav-icon { font-size: 18px; line-height: 1; }
+    .nav-btn:not(.active) .nav-icon { opacity: 0.25; }
+    .nav-lbl { font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+    .nav-btn.active .nav-lbl { color: #4a7abf; }
+    .nav-btn:not(.active) .nav-lbl { color: #2a4060; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="bv-logo">
+      <img src="icon.png" alt="Brussels Virtual" onerror="this.parentElement.innerHTML='<div style=\'background:#1a2e50;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:14px;color:#fff\'>BV</div>'" />
+    </div>
+    <div class="header-text">
+      <h1>Brussels Virtual</h1>
+      <p>Fly Europe · Explore the World</p>
+    </div>
+    <div class="header-dot"></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ATLAS -->
+    <div class="screen active" id="screen-atlas">
+      <div class="atlas-top">
+        <div class="atlas-top-logo">Atlas</div>
+        <div class="atlas-top-sub">Your Brussels Virtual crew center</div>
+      </div>
+      <div class="atlas-card">
+        <div class="atlas-card-title">Sign In</div>
+        <label class="field-label">Email address</label>
+        <input class="field-input" type="email" placeholder="your@email.com" />
+        <label class="field-label">Password</label>
+        <input class="field-input" type="password" placeholder="••••••••" />
+        <div class="forgot"><a href="https://atlas.va-center.com/login" target="_blank">Forgot your password?</a></div>
+        <button class="btn-primary" onclick="window.open('https://atlas.va-center.com/login','_blank')">Log In</button>
+        <div class="divider-row"><div class="divider-line"></div><div class="divider-text">OR</div><div class="divider-line"></div></div>
+        <button class="btn-discord" onclick="window.open('https://atlas.va-center.com/login','_blank')">
+          <svg class="discord-svg" viewBox="0 0 71 55" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.4a.2.2 0 0 0-.2.1 40.8 40.8 0 0 0-1.8 3.7 54 54 0 0 0-16.2 0A37.7 37.7 0 0 0 25.5.5a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 10.6 4.9a.2.2 0 0 0-.1.1C1.6 18.1-.9 31 .3 43.6a.2.2 0 0 0 .1.2 58.8 58.8 0 0 0 17.7 9 .2.2 0 0 0 .2-.1 42 42 0 0 0 3.6-5.9.2.2 0 0 0-.1-.3 38.7 38.7 0 0 1-5.5-2.6.2.2 0 0 1 0-.4l1.1-.8a.2.2 0 0 1 .2 0c11.5 5.3 24 5.3 35.4 0a.2.2 0 0 1 .2 0l1.1.8a.2.2 0 0 1 0 .4 36.1 36.1 0 0 1-5.5 2.6.2.2 0 0 0-.1.3 47.1 47.1 0 0 0 3.6 5.9.2.2 0 0 0 .2.1 58.6 58.6 0 0 0 17.7-9 .2.2 0 0 0 .1-.2C73.6 29.1 69.6 16.3 60.2 5a.2.2 0 0 0-.1-.1zM23.7 36c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2z"/></svg>
+          Log In with Discord
+        </button>
+        <div class="atlas-signup">Don't have an account? <a href="https://atlas.va-center.com/signup" target="_blank">Sign Up</a></div>
+      </div>
+    </div>
+
+    <!-- NEWS -->
+    <div class="screen" id="screen-news">
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <div class="live-text">Brussels Virtual News</div>
+        <div class="live-sub" id="last-updated">Loading...</div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterNews('all',this)">All</button>
+        <button class="filter-btn" onclick="filterNews('announcement',this)">📣 Announcements</button>
+        <button class="filter-btn" onclick="filterNews('event',this)">✈️ Events</button>
+        <button class="filter-btn" onclick="filterNews('ifnews',this)">📱 IF News</button>
+      </div>
+      <div id="news-feed">
+        <div class="news-loading">Loading news...</div>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="screen" id="screen-info">
+      <div class="section-title red">Our team</div>
+      <div class="staff-card"><div class="staff-avatar ceo">D</div><div class="staff-info"><div class="staff-name">Danil.V.L</div><div class="staff-role-short">CEO</div><div class="staff-role-long">Chief Executive Officer</div></div></div>
+      <div class="staff-card"><div class="staff-avatar">A</div><div class="staff-info"><div class="staff-name">avandemaele_SN</div><div class="staff-role-short">COO</div><div class="staff-role-long">Chief Operating Officer</div></div></div>
+      <div class="staff-card"><div class="staff-avatar">M</div><div class="staff-info"><div class="staff-name">misspIGGIpop</div><div class="staff-role-short">CTO</div><div class="staff-role-long">Chief Training Officer</div></div></div>
+      <div class="section-title" style="margin-top:18px">Pilot ranks</div>
+      <div class="rank-row"><span class="rank-name">Cadet</span><span class="rank-badge">0 hrs</span></div>
+      <div class="rank-row"><span class="rank-name">Junior Pilot</span><span class="rank-badge">50 hrs</span></div>
+      <div class="rank-row"><span class="rank-name">Senior Pilot</span><span class="rank-badge">100 hrs</span></div>
+      <div class="rank-row"><span class="rank-name">Captain</span><span class="rank-badge">250 hrs</span></div>
+      <div class="rank-row"><span class="rank-name">Chief Pilot</span><span class="rank-badge">500 hrs</span></div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="btn-atlas" onclick="switchTab('atlas')">
+      <div class="nav-dot"></div><span class="nav-icon">🗂️</span><span class="nav-lbl">Atlas</span>
+    </button>
+    <button class="nav-btn" id="btn-news" onclick="switchTab('news')">
+      <div class="nav-dot"></div><span class="nav-icon">📢</span><span class="nav-lbl">News</span>
+    </button>
+    <button class="nav-btn" id="btn-info" onclick="switchTab('info')">
+      <div class="nav-dot"></div><span class="nav-icon">ℹ️</span><span class="nav-lbl">Info</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // ── CONFIGURATIE — vervang dit met jouw Apps Script URL ──
+  const API_URL = 'JOUW_APPS_SCRIPT_URL_HIER';
+
+  // ── TAB NAVIGATIE ──
+  function switchTab(tab) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('screen-' + tab).classList.add('active');
+    document.getElementById('btn-' + tab).classList.add('active');
+    if (tab === 'news') loadNews();
+  }
+
+  // ── FILTER ──
+  let currentFilter = 'all';
+  function filterNews(tag, btn) {
+    currentFilter = tag;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.news-item').forEach(item => {
+      item.classList.toggle('hidden', tag !== 'all' && item.dataset.tag !== tag);
+    });
+  }
+
+  // ── NEWS LADEN ──
+  async function loadNews() {
+    const feed = document.getElementById('news-feed');
+    feed.innerHTML = '<div class="news-loading">Loading news...</div>';
+    try {
+      const res = await fetch(API_URL + '?action=getNews');
+      const data = await res.json();
+      renderNews(data);
+    } catch(e) {
+      feed.innerHTML = '<div class="news-empty">Could not load news. Please try again later.</div>';
+    }
+  }
+
+  function renderNews(items) {
+    const feed = document.getElementById('news-feed');
+    const sub = document.getElementById('last-updated');
+    if (!items || items.length === 0) {
+      feed.innerHTML = '<div class="news-empty">No news yet.</div>';
+      return;
+    }
+    sub.textContent = 'Updated just now';
+    const tagLabels = { announcement: 'Announcement', event: 'Event', ifnews: 'IF News' };
+    const channelLabels = { announcement: 'announcements', event: 'events', ifnews: 'infinite-flight-news' };
+    feed.innerHTML = items.map(item => `
+      <div class="news-item${currentFilter !== 'all' && item.tag !== currentFilter ? ' hidden' : ''}" data-tag="${item.tag}">
+        <div class="news-header">
+          <span class="news-tag tag-${item.tag}">${tagLabels[item.tag] || item.tag}</span>
+          <span class="news-channel"><span>#</span>${channelLabels[item.tag] || item.tag}</span>
+        </div>
+        <div class="news-title">${escHtml(item.title)}</div>
+        <div class="news-body">${escHtml(item.message)}</div>
+        <div class="news-footer">
+          <div class="news-avatar">${escHtml(item.author.charAt(0).toUpperCase())}</div>
+          <div class="news-meta">${escHtml(item.author)} · ${formatDate(item.timestamp)}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function formatDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff/60) + ' min ago';
+    if (diff < 86400) return Math.floor(diff/3600) + ' hours ago';
+    if (diff < 604800) return Math.floor(diff/86400) + ' days ago';
+    return d.toLocaleDateString('en-GB');
+  }
+</script>
+</body>
+</html>
