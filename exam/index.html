@@ -592,9 +592,9 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
 
 <script>
 const WEBHOOK = "https://discord.com/api/webhooks/1490322686243508224/Cu6z16cBjYOHuIjCAzh3V6vyO1kQmKqhBPZz0QS-zBCrhdWFzYAwE18VxpdU0QrfdWiS";
-const JSONBIN_KEY = "YOUR_JSONBIN_MASTER_KEY";
-const JSONBIN_BIN  = "YOUR_JSONBIN_BIN_ID";
-const STAFF_PASS   = "BVStaff2024!";
+const JSONBIN_KEY = "$2a$10$DARqx1XhVF5diWJO3l5Tjuk4dhi9mMfT0qvblU9AN80BEyATDSA2a";
+const JSONBIN_BIN  = "69dc2e31856a6821892890bd";
+const STAFF_PASS   = "BrusselsVA,01";
 const MAX_SCORE    = 20;
 
 const questions = [
@@ -739,7 +739,7 @@ async function sendToDiscord(s) {
 }
 
 async function saveToJsonBin(submission) {
-  if (JSONBIN_KEY === 'YOUR_JSONBIN_MASTER_KEY') return;
+  if (JSONBIN_KEY === '$2a$10$DARqx1XhVF5diWJO3l5Tjuk4dhi9mMfT0qvblU9AN80BEyATDSA2a') return;
   try {
     const get = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {headers:{'X-Master-Key':JSONBIN_KEY}});
     const data = await get.json();
