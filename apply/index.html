@@ -164,9 +164,21 @@ async function submitForm() {
     return;
   }
   if (ifcValid !== true) {
-    document.getElementById('errorMsg').textContent = '✗ Please verify your IFC username first.';
-    document.getElementById('errorMsg').style.display = 'block';
-    return;
+    if (ifc) {
+      // Auto-trigger verification first
+      await checkIfc();
+      if (ifcValid !== true) {
+        document.getElementById('errorMsg').textContent = '✗ IFC username could not be verified. Please check your spelling.';
+        document.getElementById('errorMsg').style.display = 'block';
+        btn.textContent = 'Send Application';
+        btn.disabled = false;
+        return;
+      }
+    } else {
+      document.getElementById('errorMsg').textContent = '✗ Please fill in your IFC username.';
+      document.getElementById('errorMsg').style.display = 'block';
+      return;
+    }
   }
 
   const btn = document.getElementById('submitBtn');
