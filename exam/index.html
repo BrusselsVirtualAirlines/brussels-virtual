@@ -743,7 +743,8 @@ async function saveToJsonBin(submission) {
   try {
     const get = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {headers:{'X-Master-Key':JSONBIN_KEY}});
     const data = await get.json();
-    const list = data.record || [];
+    const record = data.record;
+    const list = Array.isArray(record) ? record : (record?.submissions || []);
     list.push(submission);
     await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
       method:'PUT',
