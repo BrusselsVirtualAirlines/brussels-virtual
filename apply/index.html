@@ -114,11 +114,13 @@ async function checkIfc() {
   msg.style.display = 'none';
 
   try {
-    const res = await fetch(`https://community.infiniteflight.com/u/${encodeURIComponent(username)}.json`, {
-      headers: { 'Accept': 'application/json' }
-    });
-    if (res.ok) {
-      const data = await res.json();
+    const target = `https://community.infiniteflight.com/u/${encodeURIComponent(username)}.json`;
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+    const res = await fetch(proxyUrl);
+    const wrapper = await res.json();
+
+    if (wrapper.status && wrapper.status.http_code === 200) {
+      const data = JSON.parse(wrapper.contents);
       const name = data.user?.name || username;
       ifcValid = true;
       input.classList.add('valid');
@@ -139,9 +141,14 @@ async function checkIfc() {
       msg.style.display = 'block';
     }
   } catch(e) {
-    // CORS or network issue — allow submission anyway
-    ifcValid = null;
-    status.style.display = 'none';
+    ifcValid = false;
+    input.classList.add('invalid');
+    input.classList.remove('valid');
+    status.textContent = '✗';
+    status.style.color = '#ff6680';
+    msg.textContent = '✗ Could not verify username. Please try again.';
+    msg.style.color = '#ff6680';
+    msg.style.display = 'block';
   }
 }
 
