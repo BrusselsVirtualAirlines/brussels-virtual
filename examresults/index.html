@@ -140,7 +140,8 @@ async function loadSubmissions() {
       headers: {'X-Master-Key': JSONBIN_KEY}
     });
     const data = await res.json();
-    submissions = data.record || [];
+    const record = data.record;
+    submissions = Array.isArray(record) ? record : (record?.submissions || []);
     submissions.sort((a,b) => b.id - a.id);
     renderList();
   } catch(e) {
