@@ -22,7 +22,7 @@ body{font-family:'Nunito Sans',sans-serif;min-height:100vh;background:radial-gra
 .detail-divider{width:48px;height:3px;background:var(--red);border-radius:2px;margin-bottom:48px}
 .field{margin-bottom:24px}
 .field label{display:block;font-size:10px;letter-spacing:4px;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:8px}
-.field input,.field textarea{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px 18px;color:var(--white);font-family:'Nunito Sans',sans-serif;font-size:14px;font-weight:600;outline:none;transition:border-color .2s}.field input.valid{border-color:rgba(0,200,100,0.6)}.field input.invalid{border-color:rgba(225,0,42,0.6)}
+.field input,.field textarea{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px 18px;color:var(--white);font-family:'Nunito Sans',sans-serif;font-size:14px;font-weight:600;outline:none;transition:border-color .2s}
 .field input:focus,.field textarea:focus{border-color:rgba(225,0,42,0.6);background:rgba(255,255,255,0.1)}
 .field textarea{resize:vertical;min-height:100px}
 .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,0.3)}
@@ -65,11 +65,7 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
   </div>
   <div class="field">
     <label>IFC Username</label>
-    <div style="position:relative">
-      <input type="text" id="ifc" placeholder="@username" oninput="resetIfc()" onblur="checkIfc()">
-      <span id="ifcStatus" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;display:none"></span>
-    </div>
-    <div id="ifcMsg" style="font-size:11px;letter-spacing:1px;margin-top:6px;display:none"></div>
+    <input type="text" id="ifc" placeholder="@username">
   </div>
   <div class="field">
     <label>Notes</label>
@@ -89,67 +85,6 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
 </footer>
 
 <script>
-let ifcValid = null;
-
-function resetIfc() {
-  ifcValid = null;
-  const input = document.getElementById('ifc');
-  const status = document.getElementById('ifcStatus');
-  const msg = document.getElementById('ifcMsg');
-  input.classList.remove('valid','invalid');
-  status.style.display = 'none';
-  msg.style.display = 'none';
-}
-
-async function checkIfc() {
-  const input = document.getElementById('ifc');
-  const status = document.getElementById('ifcStatus');
-  const msg = document.getElementById('ifcMsg');
-  const username = input.value.trim().replace(/^@/, '');
-  if (!username) return;
-
-  status.textContent = '⏳';
-  status.style.display = 'inline';
-  status.style.color = 'rgba(255,255,255,0.5)';
-  msg.style.display = 'none';
-
-  try {
-    const target = `https://community.infiniteflight.com/u/${encodeURIComponent(username)}.json`;
-    const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(target)}`);
-
-    if (res.ok) {
-      const data = await res.json();
-      const name = data.user?.name || username;
-      ifcValid = true;
-      input.classList.add('valid');
-      input.classList.remove('invalid');
-      status.textContent = '✓';
-      status.style.color = '#4dffaa';
-      msg.textContent = `✓ Found: ${name}`;
-      msg.style.color = '#4dffaa';
-      msg.style.display = 'block';
-    } else {
-      ifcValid = false;
-      input.classList.add('invalid');
-      input.classList.remove('valid');
-      status.textContent = '✗';
-      status.style.color = '#ff6680';
-      msg.textContent = '✗ IFC username not found. Please check your spelling.';
-      msg.style.color = '#ff6680';
-      msg.style.display = 'block';
-    }
-  } catch(e) {
-    ifcValid = false;
-    input.classList.add('invalid');
-    input.classList.remove('valid');
-    status.textContent = '✗';
-    status.style.color = '#ff6680';
-    msg.textContent = '✗ Could not verify. Please try again.';
-    msg.style.color = '#ff6680';
-    msg.style.display = 'block';
-  }
-}
-
 async function submitForm() {
   const name  = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -161,23 +96,7 @@ async function submitForm() {
     document.getElementById('errorMsg').style.display = 'block';
     return;
   }
-  if (ifcValid !== true) {
-    if (ifc) {
-      // Auto-trigger verification first
-      await checkIfc();
-      if (ifcValid !== true) {
-        document.getElementById('errorMsg').textContent = '✗ IFC username could not be verified. Please check your spelling.';
-        document.getElementById('errorMsg').style.display = 'block';
-        btn.textContent = 'Send Application';
-        btn.disabled = false;
-        return;
-      }
-    } else {
-      document.getElementById('errorMsg').textContent = '✗ Please fill in your IFC username.';
-      document.getElementById('errorMsg').style.display = 'block';
-      return;
-    }
-  }
+
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
