@@ -1,0 +1,22 @@
+{
+  "name": "Brussels Virtual",
+  "short_name": "BV",
+  "description": "Brussels Virtual — Fly Europe, Explore the World",
+  "start_url": "/app.html",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#060c18",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
