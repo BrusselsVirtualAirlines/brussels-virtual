@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Admin — Brussels Virtual</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Barlow', sans-serif; background: #0b1120; color: #fff; min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 24px;
+    }
+    .login-box {
+      width: 100%; max-width: 380px;
+      background: #111d35; border: 1px solid #1e2d4a;
+      border-radius: 16px; padding: 32px;
+    }
+    .login-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: #c0392b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+    .login-title { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 1px; margin-bottom: 24px; }
+    .field-label { display: block; font-family: 'Barlow Condensed', sans-serif; color: #4a6fa5; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .field-input { width: 100%; background: #0b1120; border: 1px solid #1e2d4a; border-radius: 9px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: 'Barlow', sans-serif; margin-bottom: 14px; outline: none; }
+    .field-input:focus { border-color: #1a56c4; }
+    .field-input::placeholder { color: #2a4060; }
+    .btn-login { width: 100%; padding: 12px; background: #1a56c4; color: #fff; border: none; border-radius: 9px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+    .btn-login:hover { background: #1e64e0; }
+    .login-error { color: #c0392b; font-size: 12px; margin-top: 10px; display: none; font-family: 'Barlow Condensed', sans-serif; }
+
+    /* ── ADMIN PANEL ── */
+    #admin-screen { display: none; }
+
+    .topbar {
+      background: #060c18; border-bottom: 1px solid #1a2540;
+      padding: 12px 24px; display: flex; align-items: center; gap: 12px;
+    }
+    .topbar-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+    .topbar-sub { font-family: 'Barlow Condensed', sans-serif; color: #c0392b; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; }
+    .topbar-logout { margin-left: auto; background: none; border: 1px solid #1e2d4a; border-radius: 7px; padding: 5px 12px; color: #4a6fa5; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+    .topbar-logout:hover { color: #c0392b; border-color: #c0392b; }
+
+    .admin-body { max-width: 900px; margin: 0 auto; padding: 24px; }
+
+    /* Compose */
+    .compose-card { background: #111d35; border: 1px solid #1e2d4a; border-radius: 14px; padding: 20px; margin-bottom: 24px; }
+    .compose-title { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: #c0392b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 600; }
+    .compose-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .compose-row .field-input { margin-bottom: 0; }
+    .select-input { flex: 0 0 160px; background: #0b1120; border: 1px solid #1e2d4a; border-radius: 9px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: 'Barlow', sans-serif; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .select-input:focus { border-color: #1a56c4; }
+    option { background: #111d35; }
+    .textarea-input { width: 100%; background: #0b1120; border: 1px solid #1e2d4a; border-radius: 9px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: 'Barlow', sans-serif; outline: none; resize: vertical; min-height: 100px; margin-bottom: 12px; }
+    .textarea-input:focus { border-color: #1a56c4; }
+    .textarea-input::placeholder { color: #2a4060; }
+    .btn-publish { padding: 11px 24px; background: #1a56c4; color: #fff; border: none; border-radius: 9px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+    .btn-publish:hover { background: #1e64e0; }
+    .btn-publish:disabled { opacity: 0.5; cursor: not-allowed; }
+    .publish-status { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; margin-left: 12px; display: none; }
+
+    /* Posts list */
+    .posts-title { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: #4a6fa5; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 600; }
+    .post-item { background: #111d35; border: 1px solid #1e2d4a; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 12px; }
+    .post-tag { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.8px; flex-shrink: 0; margin-top: 2px; }
+    .tag-announcement { background: #2a0a0a; color: #c0392b; }
+    .tag-event        { background: #0f2044; color: #4a9eff; }
+    .tag-ifnews       { background: #0f2a1a; color: #3aad6e; }
+    .post-body { flex: 1; }
+    .post-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .post-message { color: #4a6fa5; font-size: 12px; line-height: 1.4; margin-bottom: 6px; white-space: pre-wrap; }
+    .post-meta { font-family: 'Barlow Condensed', sans-serif; color: #2a4060; font-size: 11px; }
+    .btn-delete { background: none; border: 1px solid #2a1a1a; border-radius: 7px; color: #c0392b; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; padding: 4px 10px; cursor: pointer; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-delete:hover { background: #2a0a0a; }
+
+    .posts-loading { color: #2a4060; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; padding: 20px 0; text-align: center; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Brussels Virtual</div>
+    <div class="login-title">Staff Admin Panel</div>
+    <label class="field-label">Password</label>
+    <input class="field-input" type="password" id="pw-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="btn-login" onclick="doLogin()">Log In</button>
+    <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-screen">
+  <div class="topbar">
+    <div>
+      <div class="topbar-logo">Brussels Virtual</div>
+      <div class="topbar-sub">Admin Panel</div>
+    </div>
+    <button class="topbar-logout" onclick="doLogout()">Log out</button>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- Compose -->
+    <div class="compose-card">
+      <div class="compose-title">Publish new message</div>
+      <div class="compose-row">
+        <input class="field-input" id="post-title" placeholder="Title" style="flex:1" />
+        <select class="select-input" id="post-tag">
+          <option value="announcement">📣 Announcement</option>
+          <option value="event">✈️ Event</option>
+          <option value="ifnews">📱 IF News</option>
+        </select>
+      </div>
+      <textarea class="textarea-input" id="post-message" placeholder="Message content..."></textarea>
+      <div style="display:flex;align-items:center">
+        <button class="btn-publish" id="btn-publish" onclick="publishPost()">Publish</button>
+        <span class="publish-status" id="publish-status"></span>
+      </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="posts-title">Published messages</div>
+    <div id="posts-list"><div class="posts-loading">Loading...</div></div>
+
+  </div>
+</div>
+
+<script>
+  // ── CONFIGURATIE ──
+  const API_URL  = 'JOUW_APPS_SCRIPT_URL_HIER';   // vervang dit
+  const PASSWORD = 'BrusselsVirtualVA';
+
+  // ── LOGIN ──
+  function doLogin() {
+    const pw = document.getElementById('pw-input').value;
+    if (pw === PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      loadPosts();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('pw-input').value = '';
+  }
+
+  // ── PUBLICEREN ──
+  async function publishPost() {
+    const title   = document.getElementById('post-title').value.trim();
+    const message = document.getElementById('post-message').value.trim();
+    const tag     = document.getElementById('post-tag').value;
+    const status  = document.getElementById('publish-status');
+    const btn     = document.getElementById('btn-publish');
+
+    if (!title || !message) { alert('Please fill in title and message.'); return; }
+
+    btn.disabled = true;
+    status.style.display = 'inline';
+    status.style.color = '#4a6fa5';
+    status.textContent = 'Publishing...';
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'addNews', title, message, tag, author: 'Staff' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        status.style.color = '#3aad6e';
+        status.textContent = '✓ Published!';
+        document.getElementById('post-title').value = '';
+        document.getElementById('post-message').value = '';
+        loadPosts();
+      } else {
+        throw new Error(data.error);
+      }
+    } catch(e) {
+      status.style.color = '#c0392b';
+      status.textContent = '✗ Error: ' + e.message;
+    }
+    btn.disabled = false;
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+  }
+
+  // ── BERICHTEN LADEN ──
+  async function loadPosts() {
+    const list = document.getElementById('posts-list');
+    list.innerHTML = '<div class="posts-loading">Loading...</div>';
+    try {
+      const res = await fetch(API_URL + '?action=getNews');
+      const data = await res.json();
+      renderPosts(data);
+    } catch(e) {
+      list.innerHTML = '<div class="posts-loading">Could not load posts.</div>';
+    }
+  }
+
+  function renderPosts(items) {
+    const list = document.getElementById('posts-list');
+    if (!items || items.length === 0) { list.innerHTML = '<div class="posts-loading">No posts yet.</div>'; return; }
+    const labels = { announcement: 'Announcement', event: 'Event', ifnews: 'IF News' };
+    list.innerHTML = items.map((item, i) => `
+      <div class="post-item">
+        <span class="post-tag tag-${item.tag}">${labels[item.tag] || item.tag}</span>
+        <div class="post-body">
+          <div class="post-title">${esc(item.title)}</div>
+          <div class="post-message">${esc(item.message)}</div>
+          <div class="post-meta">${esc(item.author)} · ${formatDate(item.timestamp)}</div>
+        </div>
+        <button class="btn-delete" onclick="deletePost(${item.row})">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  async function deletePost(row) {
+    if (!confirm('Delete this post?')) return;
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'deleteNews', row })
+      });
+      const data = await res.json();
+      if (data.success) loadPosts();
+      else alert('Error: ' + data.error);
+    } catch(e) {
+      alert('Could not delete post.');
+    }
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function formatDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff/60) + ' min ago';
+    if (diff < 86400) return Math.floor(diff/3600) + ' hours ago';
+    if (diff < 604800) return Math.floor(diff/86400) + ' days ago';
+    return d.toLocaleDateString('en-GB');
+  }
+</script>
+</body>
+</html>
