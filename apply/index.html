@@ -68,6 +68,10 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
     <input type="text" id="ifc" placeholder="@username">
   </div>
   <div class="field">
+    <label>IFC Profile Link <span style="color:rgba(255,255,255,0.3);font-size:9px;letter-spacing:1px">(optional)</span></label>
+    <input type="url" id="ifclink" placeholder="https://community.infiniteflight.com/u/username">
+  </div>
+  <div class="field">
     <label>Notes</label>
     <textarea id="notes" placeholder="Tell us something about yourself..."></textarea>
   </div>
@@ -113,6 +117,7 @@ async function submitForm() {
         { name: "New application from", value: name, inline: false },
         { name: "Email", value: email, inline: false },
         { name: "IFC", value: ifc, inline: false },
+        { name: "IFC Profile", value: document.getElementById('ifclink').value.trim() || "(not provided)", inline: false },
         { name: "Notes", value: notes || "(none)", inline: false }
       ],
       timestamp: new Date().toISOString()
@@ -126,7 +131,8 @@ async function submitForm() {
       type: 'applicant',
       date: new Date().toISOString(),
       name, email, ifc,
-      notes: notes || '(none)'
+      notes: notes || '(none)',
+      ifclink: document.getElementById('ifclink').value.trim() || ''
     });
     fetch("https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec?" + params.toString()).catch(()=>{});
 
