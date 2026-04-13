@@ -358,6 +358,19 @@ async function loadArchive() {
     document.getElementById('archiveList').innerHTML = `<p style="color:#ff6680;text-align:center;padding:40px">Could not load archive: ${e.message}</p>`;
   }
 }
+async function manualArchive(i, row, name, ifc, email, date, notes, status) {
+  if (!confirm(`Archive ${name} (${ifc})?`)) return;
+
+  // Archive in Google Sheets
+  const params = new URLSearchParams({ action: 'manualArchive', row, status });
+  await fetch("https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec?" + params.toString()).catch(()=>{});
+
+  // Remove card from UI
+  const card = document.getElementById('appcard-' + i);
+  card.style.opacity = '0';
+  card.style.transition = 'opacity 0.3s';
+  setTimeout(() => card.remove(), 300);
+}
 </script>
 </body>
 </html>
