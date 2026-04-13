@@ -740,18 +740,13 @@ async function sendToDiscord(s) {
 
 async function saveToJsonBin(submission) {
   try {
-    const res = await fetch(SCRIPT_URL, {
+    await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain'},
       body: JSON.stringify(submission)
     });
-    const data = await res.json();
-    if (data.success) {
-      console.log('Saved to Google Sheets OK');
-    } else {
-      console.error('Sheet error:', data.error);
-      document.getElementById('resultMsg').innerHTML += `<p style="color:#ff6680;margin-top:12px;font-size:12px">⚠️ Storage error: ${data.error}</p>`;
-    }
+    console.log('Submission sent to Google Sheets');
   } catch(e) {
     console.error('Save error:', e);
     document.getElementById('resultMsg').innerHTML += `<p style="color:#ff6680;margin-top:12px;font-size:12px">⚠️ Storage error: ${e.message}</p>`;
