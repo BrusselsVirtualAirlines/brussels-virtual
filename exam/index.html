@@ -739,19 +739,23 @@ async function sendToDiscord(s) {
 }
 
 async function saveToJsonBin(submission) {
-  if (JSONBIN_KEY === '$2a$10$DARqx1XhVF5diWJO3l5Tjuk4dhi9mMfT0qvblU9AN80BEyATDSA2a') return;
   try {
-    const get = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {headers:{'X-Master-Key':JSONBIN_KEY}});
-    const data = await get.json();
-    const record = data.record;
-    const list = Array.isArray(record) ? record : (record?.submissions || []);
-    list.push(submission);
-    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
-      body: JSON.stringify(list)
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(submission)
     });
-  } catch(e) {}
+    const data = await res.json();
+    if (data.success) {
+      console.log('Saved to Google Sheets OK');
+    } else {
+      console.error('Sheet error:', data.error);
+      document.getElementById('resultMsg').innerHTML += `<p style="color:#ff6680;margin-top:12px;font-size:12px">⚠️ Storage error: ${data.error}</p>`;
+    }
+  } catch(e) {
+    console.error('Save error:', e);
+    document.getElementById('resultMsg').innerHTML += `<p style="color:#ff6680;margin-top:12px;font-size:12px">⚠️ Storage error: ${e.message}</p>`;
+  }
 }
 </script>
 </body>
