@@ -241,7 +241,7 @@ async function loadApplicants() {
     const apps = rows
       .filter(r => r.Name && r.Date)
       .map(r => ({
-        date: r.Date, name: r.Name, email: r.Email || '', ifc: r.IFC || '', notes: r.Notes || '', status: r.Status || 'Pending', row: r._row
+        date: r.Date, name: r.Name, email: r.Email || '', ifc: r.IFC || '', notes: r.Notes || '', status: r.Status || 'Pending', row: r._row, ifclink: r['IFC Link'] || ''
       })).sort((a,b) => new Date(b.date) - new Date(a.date));
 
     // Apply any locally saved status overrides
@@ -271,7 +271,8 @@ async function loadApplicants() {
         <h3>${a.name}</h3>
         <p>${a.ifc} · ${a.email}</p>
         <p>${new Date(a.date).toLocaleString('nl-BE')}</p>
-        ${a.notes && a.notes !== '(none)' ? `<div class="notes">"${a.notes}"</div>` : ''}
+        ${a.notes && a.notes !== '(none)' ? `<div class="notes">&quot;${a.notes}&quot;</div>` : ''}
+        ${a.ifclink ? `<p><a href="${a.ifclink}" target="_blank" style="color:var(--red);font-size:11px;letter-spacing:1px">🔗 IFC Profile</a></p>` : ''}
         <div class="status-row">
           <button class="status-btn ${a.status === 'Pending'  ? 'active-pending'  : ''}" onclick="updateStatus(${i}, 'Pending', '${a.ifc}', ${a.row}, '${a.name}')">⏳ Pending</button>
           <button class="status-btn ${a.status === 'Accepted' ? 'active-accepted' : ''}" onclick="updateStatus(${i}, 'Accepted', '${a.ifc}', ${a.row}, '${a.name}')">✓ Accepted</button>
