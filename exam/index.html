@@ -682,9 +682,9 @@ function submitExam(timeUp=false) {
 
   const pct = Math.round(score / MAX_SCORE * 100);
   const pass = pct >= 50;
-  const timeTaken = (15*60 - timeLeft - (timeLeft<=0?0:0));
-  const mins = Math.floor((15*60 - timeLeft) / 60);
-  const secs = (15*60 - timeLeft) % 60;
+  const timeTaken = (30*60 - timeLeft);
+  const mins = Math.floor((30*60 - timeLeft) / 60);
+  const secs = (30*60 - timeLeft) % 60;
 
   const submission = {
     id: Date.now(),
