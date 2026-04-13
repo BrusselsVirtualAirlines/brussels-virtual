@@ -112,8 +112,7 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
 
 <script>
 const STAFF_PASS  = 'BrusselsVA,01';
-const JSONBIN_KEY = '$2a$10$DARqx1XhVF5diWJO3l5Tjuk4dhi9mMfT0qvblU9AN80BEyATDSA2a';
-const JSONBIN_BIN = '69dc2e31856a6821892890bd';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec';
 const MAX_SCORE   = 27;
 
 let submissions = [];
@@ -131,21 +130,27 @@ function login() {
 
 async function loadSubmissions() {
   document.getElementById('submissionList').innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding:40px">Loading...</p>';
-  if (JSONBIN_KEY === '$2a$10$DARqx1XhVF5diWJO3l5Tjuk4dhi9mMfT0qvblU9AN80BEyATDSA2a') {
-    showSampleData();
-    return;
-  }
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {
-      headers: {'X-Master-Key': JSONBIN_KEY}
-    });
-    const data = await res.json();
-    const record = data.record;
-    submissions = Array.isArray(record) ? record : (record?.submissions || []);
+    const res = await fetch(SCRIPT_URL);
+    const rows = await res.json();
+    submissions = rows.map(r => ({
+      id: new Date(r.Date).getTime(),
+      date: r.Date,
+      name: r.Name,
+      email: r.Email,
+      ifc: r.IFC,
+      score: r.Score,
+      max: r.Max,
+      pct: parseInt(r.Percentage),
+      pass: r.Result === 'PASSED',
+      timeTaken: r['Time Used'],
+      timeUp: false,
+      answers: r.Answers || []
+    }));
     submissions.sort((a,b) => b.id - a.id);
     renderList();
   } catch(e) {
-    document.getElementById('submissionList').innerHTML = '<p style="color:#ff6680;text-align:center;padding:40px">Could not load results. Check JSONBin credentials.</p>';
+    document.getElementById('submissionList').innerHTML = `<p style="color:#ff6680;text-align:center;padding:40px">Could not load results: ${e.message}</p>`;
   }
 }
 
