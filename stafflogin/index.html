@@ -279,6 +279,8 @@ async function loadApplicants() {
 
 async function updateStatus(i, status, ifc, row, name) {
   // Update in Google Sheets via image trick (bypasses CORS completely)
+  console.log('Updating row:', row, 'to status:', status);
+  alert('Saving status to row: ' + row + ' | Status: ' + status);
   const params = new URLSearchParams({ action: 'updateStatus', row, status });
   const img = new Image();
   img.src = SCRIPT_URL + '?' + params.toString();
