@@ -85,8 +85,8 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
 </div>
 
 <div class="body">
-  <div class="detail-title">Brussels Virtual – Staff</div>
-  <div class="detail-rank-name">Exam Results</div>
+  <div class="detail-title">Brussels Virtual</div>
+  <div class="detail-rank-name">Staff Page</div>
   <div class="detail-divider"></div>
 
   <!-- NAV TABS (shown when logged in) -->
@@ -163,7 +163,7 @@ async function loadSubmissions() {
       ifc: r.IFC,
       score: r.Score,
       max: r.Max,
-      pct: parseInt(r.Percentage),
+      pct: r.Max > 0 ? Math.round((r.Score / r.Max) * 100) : Math.round(parseFloat(r.Percentage) * (parseFloat(r.Percentage) <= 1 ? 100 : 1)),
       pass: r.Result === 'PASSED',
       timeTaken: r['Time Used'],
       timeUp: false,
