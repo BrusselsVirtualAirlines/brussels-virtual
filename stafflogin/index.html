@@ -269,6 +269,7 @@ async function loadApplicants() {
           <button class="status-btn ${a.status === 'Pending'  ? 'active-pending'  : ''}" onclick="updateStatus(${i}, 'Pending',  '${a.ifc}', '${a.date}', '${a.name}')">⏳ Pending</button>
           <button class="status-btn ${a.status === 'Accepted' ? 'active-accepted' : ''}" onclick="updateStatus(${i}, 'Accepted', '${a.ifc}', '${a.date}', '${a.name}')">✓ Accepted</button>
           <button class="status-btn ${a.status === 'Refused'  ? 'active-refused'  : ''}" onclick="updateStatus(${i}, 'Refused',  '${a.ifc}', '${a.date}', '${a.name}')">✗ Refused</button>
+          <button class="status-btn" style="margin-left:auto;border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.35)" onclick="manualArchive(${i}, ${a.row}, '${a.name}', '${a.ifc}', '${a.status}')">📦 Archive</button>
         </div>
       </div>`).join('');
   } catch(e) {
