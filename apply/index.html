@@ -120,18 +120,15 @@ async function submitForm() {
   };
 
   try {
-    // Save to Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec", {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify({
-        type: 'applicant',
-        date: new Date().toISOString(),
-        name, email, ifc,
-        notes: notes || '(none)'
-      })
-    }).catch(()=>{});
+    // Save to Google Sheets via GET
+    const params = new URLSearchParams({
+      action: 'save',
+      type: 'applicant',
+      date: new Date().toISOString(),
+      name, email, ifc,
+      notes: notes || '(none)'
+    });
+    fetch("https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec?" + params.toString()).catch(()=>{});
 
     const res = await fetch("https://discord.com/api/webhooks/1102653530034155691/ILWW-wh-zlhOtdXUzCHiu4ZjzxvTEmOXQ72ms_MdjSM9ZYgYuw2xPMglL5teZrMcfsFE" , {
       method: "POST",
