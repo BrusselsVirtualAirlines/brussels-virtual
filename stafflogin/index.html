@@ -34,6 +34,7 @@
   <div id="navTabs" style="display:none" class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('exam')">Exam Results</div>
     <div class="nav-tab" onclick="switchTab('applicants')">Applicants</div>
+    <div class="nav-tab" onclick="switchTab('archive')">Archive</div>
   </div>
 
   <!-- LOGIN -->
@@ -56,6 +57,11 @@
   <div id="applicantsSection" style="display:none">
     <div class="stats-row" id="appStatsRow"></div>
     <div id="applicantsList"></div>
+  </div>
+
+  <!-- ARCHIVE VIEW -->
+  <div id="archiveSection" style="display:none">
+    <div id="archiveList"></div>
   </div>
 
   <!-- DETAIL VIEW -->
@@ -217,12 +223,14 @@ let currentTab = 'exam';
 function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    t.classList.toggle('active', (i===0 && tab==='exam') || (i===1 && tab==='applicants'));
+    t.classList.toggle('active', (i===0 && tab==='exam') || (i===1 && tab==='applicants') || (i===2 && tab==='archive'));
   });
   document.getElementById('listSection').style.display        = tab === 'exam'       ? 'block' : 'none';
   document.getElementById('applicantsSection').style.display  = tab === 'applicants' ? 'block' : 'none';
+  document.getElementById('archiveSection').style.display     = tab === 'archive'     ? 'block' : 'none';
   document.getElementById('detailSection').style.display      = 'none';
   if (tab === 'applicants') loadApplicants();
+  if (tab === 'archive') loadArchive();
 }
 
 async function loadApplicants() {
@@ -231,7 +239,7 @@ async function loadApplicants() {
     const res = await fetch(SCRIPT_URL + '?type=applicants');
     const rows = await res.json();
     const apps = rows.map(r => ({
-      date: r.Date, name: r.Name, email: r.Email, ifc: r.IFC, notes: r.Notes, status: r.Status || 'Pending'
+      date: r.Date, name: r.Name, email: r.Email, ifc: r.IFC, notes: r.Notes, status: r.Status || 'Pending', row: r._row
     })).sort((a,b) => new Date(b.date) - new Date(a.date));
 
     const stats = document.getElementById('appStatsRow');
@@ -266,9 +274,9 @@ async function loadApplicants() {
   }
 }
 
-async function updateStatus(i, status, ifc, date, name) {
+async function updateStatus(i, status, ifc, row, name) {
   // Update in Google Sheets
-  const params = new URLSearchParams({ action: 'updateStatus', ifc, date, status });
+  const params = new URLSearchParams({ action: 'updateStatus', row, status });
   fetch(SCRIPT_URL + '?' + params.toString()).catch(()=>{});
 
   // Update buttons visually
@@ -299,6 +307,56 @@ async function updateStatus(i, status, ifc, date, name) {
       }]
     })
   }).catch(()=>{});
+}
+async function loadArchive() {
+  document.getElementById('archiveList').innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding:40px">Loading...</p>';
+  try {
+    const res  = await fetch(SCRIPT_URL + '?type=archive');
+    const rows = await res.json();
+
+    if (!rows.length) {
+      document.getElementById('archiveList').innerHTML = '<div class="empty">No archived applicants yet. Applicants are automatically archived after 7 days.</div>';
+      return;
+    }
+
+    const accepted = rows.filter(r => r.Status === 'Accepted').length;
+    const refused  = rows.filter(r => r.Status === 'Refused').length;
+    const pending  = rows.filter(r => r.Status === 'Pending').length;
+
+    let html = `<div class="stats-row" style="margin-bottom:24px">
+      <div class="stat-box"><div class="n">${rows.length}</div><div class="l">Total</div></div>
+      <div class="stat-box"><div class="n" style="color:#4dffaa">${accepted}</div><div class="l">Accepted</div></div>
+      <div class="stat-box"><div class="n" style="color:#ff6680">${refused}</div><div class="l">Refused</div></div>
+      <div class="stat-box"><div class="n" style="color:#ffaa00">${pending}</div><div class="l">Pending</div></div>
+    </div>`;
+
+    html += rows.map(r => {
+      const statusColors = { Accepted: '#4dffaa', Refused: '#ff6680', Pending: '#ffaa00' };
+      const statusIcons  = { Accepted: '✓', Refused: '✗', Pending: '⏳' };
+      const color = statusColors[r.Status] || '#ffaa00';
+      const icon  = statusIcons[r.Status]  || '⏳';
+      return `
+      <div class="app-card" style="border-left:3px solid ${color}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <h3>${r.Name}</h3>
+            <p>${r.IFC} · ${r.Email}</p>
+            <p>Applied: ${new Date(r.Date).toLocaleString('nl-BE')}</p>
+            <p>Archived: ${new Date(r['Archived On']).toLocaleString('nl-BE')}</p>
+            ${r.Notes && r.Notes !== '(none)' ? `<div class="notes">"${r.Notes}"</div>` : ''}
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:22px;font-weight:900;color:${color}">${icon}</div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:${color};font-weight:800">${r.Status}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('archiveList').innerHTML = html;
+  } catch(e) {
+    document.getElementById('archiveList').innerHTML = `<p style="color:#ff6680;text-align:center;padding:40px">Could not load archive: ${e.message}</p>`;
+  }
 }
 </script>
 </body>
