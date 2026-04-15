@@ -134,7 +134,8 @@ async function submitForm() {
       notes: notes || '(none)',
       ifclink: document.getElementById('ifclink').value.trim() || ''
     });
-    fetch("https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec?" + params.toString()).catch(()=>{});
+    const img = new Image();
+    img.src = "https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec?" + params.toString();
 
     const res = await fetch("https://discord.com/api/webhooks/1102653530034155691/ILWW-wh-zlhOtdXUzCHiu4ZjzxvTEmOXQ72ms_MdjSM9ZYgYuw2xPMglL5teZrMcfsFE" , {
       method: "POST",
