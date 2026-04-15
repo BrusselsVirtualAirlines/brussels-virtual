@@ -108,7 +108,7 @@ async function loadSubmissions(force=false) {
   }
   document.getElementById('submissionList').innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding:40px">Loading...</p>';
   try {
-    const res = await fetch(SCRIPT_URL);
+    const res = await fetch(SCRIPT_URL + '?type=exam&t=' + Date.now());
     const rows = await res.json();
     submissions = rows.map(r => ({
       id: new Date(r.Date).getTime(),
