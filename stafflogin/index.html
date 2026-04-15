@@ -122,6 +122,7 @@ async function loadSubmissions(force=false) {
       pass: r.Result === 'PASSED',
       timeTaken: r['Time Used'],
       timeUp: false,
+      wrong: r['Wrong Questions'] || '',
       answers: r.Answers || []
     }));
     submissions.sort((a,b) => b.id - a.id);
@@ -209,6 +210,7 @@ function showDetail(i) {
         <div class="stat-box"><div class="n">${s.pct}%</div><div class="l">Percentage</div></div>
         <div class="stat-box"><div class="n">${correctCount}/20</div><div class="l">Correct</div></div>
         <div class="stat-box"><div class="n ${s.pass ? 'pass' : 'fail'}">${s.pass ? 'PASS' : 'FAIL'}</div><div class="l">Result</div></div>
+        ${s.wrong ? `<div class="stat-box" style="min-width:220px"><div style="font-size:11px;font-weight:700;color:#ff6680;line-height:1.8">${s.wrong}</div><div class="l">Wrong Questions</div></div>` : ''}
       </div>
       <div>${rows}</div>
     </div>`;
