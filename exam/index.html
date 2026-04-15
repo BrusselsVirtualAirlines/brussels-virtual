@@ -261,18 +261,24 @@ async function sendToDiscord(s) {
 
 async function saveToJsonBin(submission) {
   try {
+    // Compact answers: "1:1,2:0,3:1,..." = question:correct(1/0)
+    const compactAnswers = submission.answers.map((a,i) => (i+1)+':'+(a.correct?'1':'0')).join(',');
+    const wrongList = submission.answers
+      .map((a,i) => a.correct ? null : 'Q'+(i+1))
+      .filter(Boolean).join(',');
+
     const params = new URLSearchParams({
-      action: 'saveExam',
+      action:    'saveExam',
       date:      submission.date,
       name:      submission.name,
       email:     submission.email,
       ifc:       submission.ifc,
-      score:     submission.score,
-      max:       submission.max,
-      pct:       submission.pct,
+      score:     String(submission.score),
+      max:       String(submission.max),
+      pct:       String(submission.pct),
       pass:      submission.pass ? '1' : '0',
       timeTaken: submission.timeTaken,
-      answers:   JSON.stringify(submission.answers)
+      wrong:     wrongList
     });
     const img = new Image();
     img.src = SCRIPT_URL + '?' + params.toString();
