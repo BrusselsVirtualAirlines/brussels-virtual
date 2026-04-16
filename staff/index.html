@@ -223,12 +223,13 @@ header {
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.11);
   border-radius: 12px;
-  padding: 28px 20px 24px;
+  padding: 0;
   text-align: center;
   transition: all 0.25s ease;
   position: relative;
   overflow: hidden;
   width: 180px;
+  height: 140px;
 }
 
 .staff-card::after {
@@ -255,8 +256,11 @@ header {
   font-size: 16px;
   font-weight: 800;
   color: var(--white);
-  margin-bottom: 8px;
   letter-spacing: 0.3px;
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
 }
 
 .staff-abbr {
@@ -266,6 +270,10 @@ header {
   color: var(--white);
   font-weight: 700;
   transition: opacity 0.2s, transform 0.2s;
+  position: absolute;
+  top: 58px;
+  left: 0;
+  right: 0;
 }
 .staff-role-full {
   font-size: 9px;
@@ -276,7 +284,10 @@ header {
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 0.2s, transform 0.2s;
-  margin-top: 4px;
+  position: absolute;
+  top: 58px;
+  left: 0;
+  right: 0;
 }
 .staff-card:hover .staff-abbr {
   opacity: 0;
@@ -472,16 +483,16 @@ footer {
     <div class="staff-grid">
       <div class="staff-card">
         <div class="staff-name">Danil.V.L</div>
-        <div class="staff-abbr">CEO</div><div class="staff-role-full">Chief Executive Officer</div>
+        <div class="staff-abbr">CEO</div><div class="staff-role-full">Chief Executive Officer</div><div style="position:absolute;top:78px;left:0;right:0;font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;text-align:center">SN1</div>
       </div>
 
       <div class="staff-card">
         <div class="staff-name">avandemaele_SN</div>
-        <div class="staff-abbr">COO</div><div class="staff-role-full">Chief Operating Officer</div>
+        <div class="staff-abbr">COO</div><div class="staff-role-full">Chief Operating Officer</div><div style="position:absolute;top:78px;left:0;right:0;font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;text-align:center">SN2</div>
       </div>
       <div class="staff-card">
         <div class="staff-name">misspIGGIpop</div>
-        <div class="staff-abbr">CTO</div><div class="staff-role-full">Chief Training Officer</div>
+        <div class="staff-abbr">CTO</div><div class="staff-role-full">Chief Training Officer</div><div style="position:absolute;top:78px;left:0;right:0;font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;text-align:center">SN451</div>
       </div>
     </div>
   </div>
