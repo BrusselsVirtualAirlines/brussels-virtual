@@ -91,33 +91,29 @@
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec";
-const WEBHOOK = "https://discord.com/api/webhooks/1490322686243508224/Cu6z16cBjYOHuIjCAzh3V6vyO1kQmKqhBPZz0QS-zBCrhdWFzYAwE18VxpdU0QrfdWiS";
-const JSONBIN_KEY = "$2a$10$DARqx1XhVF5diWJO3l5Tjuk4dhi9mMfT0qvblU9AN80BEyATDSA2a";
-const JSONBIN_BIN  = "69dc2e31856a6821892890bd";
-const STAFF_PASS   = "BrusselsVA,01";
-const MAX_SCORE    = 20;
 
+// Antwoorden zijn verwijderd uit de browser - scoring gebeurt server-side in Google Apps Script
 const questions = [
-  {q:`Which of these statements about the transition altitude is <strong>false</strong>?`,options:[`A minimum altitude where you can fly above a controlled airport without interfering with potential aircraft on pattern`, `The transition altitude can vary depending of the type of the aircraft`, `The transition altitude must be at or above 2500ft AAL (above aerodrome level)`],answer:1,atc:false},
-  {q:`On what flightlevel (FL) should you cruise when flying <strong>westbound</strong>?`,options:[`All even FL's, e.g.: FL300 (30000ft), FL320, FL340, ...`, `All odd FL's, e.g.: FL310 (31000ft), FL330, FL350, ...`],answer:0,atc:false},
-  {q:`What is the maximum allowed airspeed below 10,000ft?`,options:[`180 knts`, `215 knts`, `250 knts`, `300 knts`],answer:2,atc:false},
-  {q:`What is the correct standard traffic pattern?`,options:[`Downwind, crosswind, upwind, base, final`, `Upwind, crosswind, downwind, base, final`, `Base, upwind, crosswind, downwind, final`, `None of the options are correct`],answer:1,atc:false},
-  {q:`Aircraft lights: when must you activate the <strong>strobe lights</strong>?`,options:[`When starting up your battery and APU`, `When starting your pushback`, `When taxiing`, `When you are going/cleared to take off, or while crossing a runway`],answer:3,atc:false},
-  {q:`When cleared for the ILS approach on runway X by the approach controller, what should you tell the Tower controller?`,options:[`Inbound for the Visual runway X`, `Inbound for the ILS runway X`, `[Callsign], is on final runway X`, `All of these above`],answer:1,atc:true},
-  {q:`Aircraft lights: when must you activate the <strong>beacon lights</strong>?`,options:[`When flying at or below 10,000ft`, `When starting up your battery and APU`, `When starting up your engines or when the plane is not stationary`, `When taxiing`],answer:2,atc:false},
-  {q:`On departure, when should you say <strong>"remaining in the pattern"</strong>?`,options:[`When you are unsure about the direction of where you are going to depart the airspace`, `When you are planning to do pattern work`, `When you must fly above the airport to follow your flight plan`, `All of these above`],answer:1,atc:true},
-  {q:`Aircraft lights: when must you activate the <strong>landing lights</strong>?`,options:[`Only when taking off, after leaving the runway the landing lights can be turned off immediately`, `At or below 10,000ft and during take-off/standing on the runway`, `At or below 10,000ft but not when taking off as it could blind other pilots`, `None of the options are correct`],answer:1,atc:false},
-  {q:`On ATIS, what is a <strong>gate hold</strong>?`,options:[`All aircrafts at gate are not allowed to pushback until the gate hold is over`, `All aircrafts from or going to a gate must hold their position until the gate hold is removed from ATIS or until the controller says 'continue taxi' or 'pushback approved'`],answer:1,atc:true},
-  {q:`Autobrake: how should it be armed when taking off or landing?`,options:[`Take-off: set to max. Landing: set to low or medium according to runway length/altitude`, `Take-off: turned off. Landing: set to low or medium according to runway length/altitude`, `Take-off: set to max. Landing: set to max`, `None of the options are correct`],answer:0,atc:false},
-  {q:`Landing at a high-altitude airport will result in a...`,options:[`Lower take-off/landing power needed, shorter runway usage when taking off/landing`, `Higher take-off/landing power needed, longer runway usage when taking off/landing`],answer:1,atc:false},
-  {q:`What is a <strong>step climb</strong> used for?`,options:[`For flying faster`, `For flying more efficiently`, `For avoiding in-air collisions`, `None of the options are correct`],answer:1,atc:false},
-  {q:`When should you request an altitude change with controllers?`,options:[`When you are doing step climbs and want to fly higher`, `On departure, when you want to climb to your cruise altitude`, `On approach, when you are close to the TOD (Top Of Descent)`],answer:0,atc:true},
-  {q:`What should you do when you have <strong>not</strong> been cleared for landing/touch and go by the controller?`,options:[`First report your position (i.e. base, final…) and if still no response, land and request frequency change when off the runway`, `First report your position (i.e. base, final…) and if still no response, declare a go-around`],answer:1,atc:true},
-  {q:`When should you use <strong>&gt;100% N1</strong> (engine power)?`,options:[`On emergencies only, but not more than 10–15 seconds`, `On heavy departures and go-arounds`, `Never`],answer:1,atc:false},
-  {q:`Which of these statements about runway colours is <strong>false</strong>?`,options:[`If the runway colour is red, you must not depart from it because it's not in use`, `The colour of a runway indicates if the wind is favourable (green = headwind, orange = crosswind, red = tailwind)`, `A controller can use a red runway up to 10kts tailwind`],answer:0,atc:false},
-  {q:`When should you execute a <strong>missed approach</strong>?`,options:[`When you are not aligned to the localizer (centerline) and too close to the airport`, `When switching to approach controller after a go-around`, `It's the same thing as a go-around`],answer:0,atc:false},
-  {q:`Which of these situations can lead to a <strong>report</strong> by a controller?`,options:[`When you are in a Center airspace while being 'away' from your device and you make a collision with another plane`, `When you descend while being 'away' and cause collisions with other aircrafts`, `None of these above`],answer:0,atc:true},
-  {q:`What is the minimum radar separation? (Horizontal separation)`,options:[`3NM at lower airspace, 5NM at higher airspace`, `5NM at lower airspace, 3NM at higher airspace`],answer:0,atc:true},
+  {q:`Which of these statements about the transition altitude is <strong>false</strong>?`,options:[`A minimum altitude where you can fly above a controlled airport without interfering with potential aircraft on pattern`, `The transition altitude can vary depending of the type of the aircraft`, `The transition altitude must be at or above 2500ft AAL (above aerodrome level)`],atc:false},
+  {q:`On what flightlevel (FL) should you cruise when flying <strong>westbound</strong>?`,options:[`All even FL's, e.g.: FL300 (30000ft), FL320, FL340, ...`, `All odd FL's, e.g.: FL310 (31000ft), FL330, FL350, ...`],atc:false},
+  {q:`What is the maximum allowed airspeed below 10,000ft?`,options:[`180 knts`, `215 knts`, `250 knts`, `300 knts`],atc:false},
+  {q:`What is the correct standard traffic pattern?`,options:[`Downwind, crosswind, upwind, base, final`, `Upwind, crosswind, downwind, base, final`, `Base, upwind, crosswind, downwind, final`, `None of the options are correct`],atc:false},
+  {q:`Aircraft lights: when must you activate the <strong>strobe lights</strong>?`,options:[`When starting up your battery and APU`, `When starting your pushback`, `When taxiing`, `When you are going/cleared to take off, or while crossing a runway`],atc:false},
+  {q:`When cleared for the ILS approach on runway X by the approach controller, what should you tell the Tower controller?`,options:[`Inbound for the Visual runway X`, `Inbound for the ILS runway X`, `[Callsign], is on final runway X`, `All of these above`],atc:true},
+  {q:`Aircraft lights: when must you activate the <strong>beacon lights</strong>?`,options:[`When flying at or below 10,000ft`, `When starting up your battery and APU`, `When starting up your engines or when the plane is not stationary`, `When taxiing`],atc:false},
+  {q:`On departure, when should you say <strong>"remaining in the pattern"</strong>?`,options:[`When you are unsure about the direction of where you are going to depart the airspace`, `When you are planning to do pattern work`, `When you must fly above the airport to follow your flight plan`, `All of these above`],atc:true},
+  {q:`Aircraft lights: when must you activate the <strong>landing lights</strong>?`,options:[`Only when taking off, after leaving the runway the landing lights can be turned off immediately`, `At or below 10,000ft and during take-off/standing on the runway`, `At or below 10,000ft but not when taking off as it could blind other pilots`, `None of the options are correct`],atc:false},
+  {q:`On ATIS, what is a <strong>gate hold</strong>?`,options:[`All aircrafts at gate are not allowed to pushback until the gate hold is over`, `All aircrafts from or going to a gate must hold their position until the gate hold is removed from ATIS or until the controller says 'continue taxi' or 'pushback approved'`],atc:true},
+  {q:`Autobrake: how should it be armed when taking off or landing?`,options:[`Take-off: set to max. Landing: set to low or medium according to runway length/altitude`, `Take-off: turned off. Landing: set to low or medium according to runway length/altitude`, `Take-off: set to max. Landing: set to max`, `None of the options are correct`],atc:false},
+  {q:`Landing at a high-altitude airport will result in a...`,options:[`Lower take-off/landing power needed, shorter runway usage when taking off/landing`, `Higher take-off/landing power needed, longer runway usage when taking off/landing`],atc:false},
+  {q:`What is a <strong>step climb</strong> used for?`,options:[`For flying faster`, `For flying more efficiently`, `For avoiding in-air collisions`, `None of the options are correct`],atc:false},
+  {q:`When should you request an altitude change with controllers?`,options:[`When you are doing step climbs and want to fly higher`, `On departure, when you want to climb to your cruise altitude`, `On approach, when you are close to the TOD (Top Of Descent)`],atc:true},
+  {q:`What should you do when you have <strong>not</strong> been cleared for landing/touch and go by the controller?`,options:[`First report your position (i.e. base, final…) and if still no response, land and request frequency change when off the runway`, `First report your position (i.e. base, final…) and if still no response, declare a go-around`],atc:true},
+  {q:`When should you use <strong>&gt;100% N1</strong> (engine power)?`,options:[`On emergencies only, but not more than 10–15 seconds`, `On heavy departures and go-arounds`, `Never`],atc:false},
+  {q:`Which of these statements about runway colours is <strong>false</strong>?`,options:[`If the runway colour is red, you must not depart from it because it's not in use`, `The colour of a runway indicates if the wind is favourable (green = headwind, orange = crosswind, red = tailwind)`, `A controller can use a red runway up to 10kts tailwind`],atc:false},
+  {q:`When should you execute a <strong>missed approach</strong>?`,options:[`When you are not aligned to the localizer (centerline) and too close to the airport`, `When switching to approach controller after a go-around`, `It's the same thing as a go-around`],atc:false},
+  {q:`Which of these situations can lead to a <strong>report</strong> by a controller?`,options:[`When you are in a Center airspace while being 'away' from your device and you make a collision with another plane`, `When you descend while being 'away' and cause collisions with other aircrafts`, `None of these above`],atc:true},
+  {q:`What is the minimum radar separation? (Horizontal separation)`,options:[`3NM at lower airspace, 5NM at higher airspace`, `5NM at lower airspace, 3NM at higher airspace`],atc:true},
 ];
 
 let timerInterval;
@@ -173,7 +169,7 @@ window.addEventListener('scroll', () => {
   float.style.display = rect.bottom < 0 ? 'flex' : 'none';
 });
 
-function submitExam(timeUp=false) {
+async function submitExam(timeUp=false) {
   const name  = document.getElementById('fname').value.trim();
   const email = document.getElementById('femail').value.trim();
   const ifc   = document.getElementById('fifc').value.trim();
@@ -186,39 +182,46 @@ function submitExam(timeUp=false) {
   }
 
   clearInterval(timerInterval);
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('submitBtn').textContent = 'Submitting...';
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
 
-  const answers = [];
-  let score = 0;
-  questions.forEach((q, i) => {
+  // Collect only the chosen answer indices — geen antwoorden in de browser
+  const chosen = questions.map((q, i) => {
     const sel = document.querySelector(`input[name="q${i}"]:checked`);
-    const chosen = sel ? parseInt(sel.value) : -1;
-    const correct = chosen === q.answer;
-    const pts = correct ? 1 : 0;
-    score += pts;
-    answers.push({ question: q.q.replace(/<[^>]+>/g,''), chosen, correct, answer: q.answer, options: q.options, atc: q.atc });
+    return sel ? parseInt(sel.value) : -1;
   });
 
-  const pct = Math.round(score / MAX_SCORE * 100);
-  const pass = pct >= 50;
-  const timeTaken = (30*60 - timeLeft);
-  const mins = Math.floor((30*60 - timeLeft) / 60);
-  const secs = (30*60 - timeLeft) % 60;
+  const mins = Math.floor((30 * 60 - timeLeft) / 60);
+  const secs = (30 * 60 - timeLeft) % 60;
+  const timeTaken = `${mins}m ${secs}s`;
 
-  const submission = {
-    id: Date.now(),
-    date: new Date().toISOString(),
-    name, email, ifc,
-    score, max: MAX_SCORE, pct, pass,
-    timeTaken: `${mins}m ${secs}s`,
-    timeUp,
-    answers
-  };
+  try {
+    const params = new URLSearchParams({
+      action:    'scoreExam',
+      date:      new Date().toISOString(),
+      name, email, ifc,
+      answers:   JSON.stringify(chosen),
+      timeTaken,
+      timeUp:    timeUp ? '1' : '0'
+    });
 
-  showResult(score, pct, pass);
-  sendToDiscord(submission);
-  saveToJsonBin(submission);
+    const res = await fetch(SCRIPT_URL + '?' + params.toString());
+    const result = await res.json();
+
+    if (result.success) {
+      showResult(result.score, result.pct, result.pass);
+    } else {
+      throw new Error(result.error || 'Unknown error');
+    }
+  } catch(e) {
+    console.error('Submit error:', e);
+    btn.disabled = false;
+    btn.textContent = 'Submit Exam';
+    const err = document.getElementById('examError');
+    err.textContent = '✗ Could not submit exam. Please check your connection and try again.';
+    err.style.display = 'block';
+  }
 }
 
 function showResult(score, pct, pass) {
@@ -231,61 +234,6 @@ function showResult(score, pct, pass) {
   document.getElementById('resultMsg').innerHTML = pass
     ? `<p>Congratulations! You scored <strong>${pct}%</strong>. Your results have been sent to the Brussels Virtual staff. You will be contacted shortly.</p>`
     : `<p>You scored <strong>${pct}%</strong>. A minimum of 50% is required. Staff will contact you with personalised feedback and a new exam invitation.</p>`;
-}
-
-async function sendToDiscord(s) {
-  const color = s.pass ? 0x00c864 : 0xe1002a;
-  const correctCount = s.answers.filter(a => a.correct).length;
-  await fetch(WEBHOOK, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      username: 'BV Exam System',
-      embeds: [{
-        title: s.pass ? '✅ Exam Passed' : '❌ Exam Failed',
-        color,
-        fields: [
-          {name:'Applicant',    value: s.name,  inline:true},
-          {name:'IFC',         value: s.ifc,   inline:true},
-          {name:'Email',       value: s.email, inline:true},
-          {name:'Score',       value: `${s.score}/${s.max} (${s.pct}%)`, inline:true},
-          {name:'Correct',     value: `${correctCount}/20 questions`, inline:true},
-          {name:'Time used',   value: s.timeTaken, inline:true},
-          {name:'Time expired',value: s.timeUp ? 'Yes ⏰' : 'No', inline:true},
-        ],
-        timestamp: s.date
-      }]
-    })
-  }).catch(()=>{});
-}
-
-async function saveToJsonBin(submission) {
-  try {
-    // Compact answers: "1:1,2:0,3:1,..." = question:correct(1/0)
-    const compactAnswers = submission.answers.map((a,i) => (i+1)+':'+(a.correct?'1':'0')).join(',');
-    const wrongList = submission.answers
-      .map((a,i) => a.correct ? null : 'Q'+(i+1))
-      .filter(Boolean).join(',');
-
-    const params = new URLSearchParams({
-      action:    'saveExam',
-      date:      submission.date,
-      name:      submission.name,
-      email:     submission.email,
-      ifc:       submission.ifc,
-      score:     String(submission.score),
-      max:       String(submission.max),
-      pct:       String(submission.pct),
-      pass:      submission.pass ? '1' : '0',
-      timeTaken: submission.timeTaken,
-      wrong:     wrongList
-    });
-    const img = new Image();
-    img.src = SCRIPT_URL + '?' + params.toString();
-    console.log('Submission sent to Google Sheets');
-  } catch(e) {
-    console.error('Save error:', e);
-  }
 }
 </script>
 </body>
