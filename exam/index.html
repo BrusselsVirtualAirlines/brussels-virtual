@@ -196,55 +196,58 @@ async function submitExam(timeUp=false) {
   const secs = (30 * 60 - timeLeft) % 60;
   const timeTaken = `${mins}m ${secs}s`;
 
-  try {
-    const params = new URLSearchParams({
-      action:    'scoreExam',
-      date:      new Date().toISOString(),
-      name, email, ifc,
-      answers:   JSON.stringify(chosen),
-      timeTaken,
-      timeUp:    timeUp ? '1' : '0'
-    });
-
-    const result = await jsonp(SCRIPT_URL + '?' + params.toString());
-
-    if (result.success) {
-      showResult(result.score, result.pct, result.pass);
-    } else {
-      throw new Error(result.error || 'Unknown error');
-    }
-  } catch(e) {
-    console.error('Submit error:', e);
-    btn.disabled = false;
-    btn.textContent = 'Submit Exam';
-    const err = document.getElementById('examError');
-    err.textContent = '✗ Could not submit exam. Please check your connection and try again.';
-    err.style.display = 'block';
-  }
-}
-
-// JSONP omzeilt CORS volledig — werkt altijd met Google Apps Script
-function jsonp(url) {
-  return new Promise((resolve, reject) => {
-    const fn = '_cb' + Date.now();
-    const s  = document.createElement('script');
-    s.src    = url + '&callback=' + fn;
-    window[fn] = data => { delete window[fn]; s.remove(); resolve(data); };
-    s.onerror  = ()   => { delete window[fn]; s.remove(); reject(new Error('Network error')); };
-    document.head.appendChild(s);
+  // Stuur antwoorden naar GAS (fire and forget — geen CORS nodig)
+  const params = new URLSearchParams({
+    action:    'scoreExam',
+    date:      new Date().toISOString(),
+    name, email, ifc,
+    answers:   JSON.stringify(chosen),
+    timeTaken,
+    timeUp:    timeUp ? '1' : '0'
   });
+  fetch(SCRIPT_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+
+  // Discord notificatie vanuit de browser als backup
+  sendDiscordSubmitted(name, email, ifc, timeTaken, timeUp);
+
+  // Toon bevestiging — deelnemers zien geen score
+  showSubmitted();
 }
 
-function showResult(score, pct, pass) {
-  document.getElementById('examSection').style.display  = 'none';
+function showSubmitted() {
+  document.getElementById('examSection').style.display   = 'none';
   document.getElementById('resultSection').style.display = 'block';
-  document.getElementById('resultScore').textContent = score;
+  document.getElementById('resultScore').style.display   = 'none';
+  document.querySelector('.result-label').style.display  = 'none';
   const badge = document.getElementById('resultBadge');
-  badge.textContent = pass ? '✓ PASSED' : '✗ FAILED';
-  badge.className = 'result-badge ' + (pass ? 'pass' : 'fail');
-  document.getElementById('resultMsg').innerHTML = pass
-    ? `<p>Congratulations! You scored <strong>${pct}%</strong>. Your results have been sent to the Brussels Virtual staff. You will be contacted shortly.</p>`
-    : `<p>You scored <strong>${pct}%</strong>. A minimum of 50% is required. Staff will contact you with personalised feedback and a new exam invitation.</p>`;
+  badge.textContent = '✓ SUBMITTED';
+  badge.className   = 'result-badge pass';
+  document.getElementById('resultMsg').innerHTML =
+    `<p>Your exam has been submitted to Brussels Virtual staff. You will be contacted shortly with your result.</p>`;
+}
+
+async function sendDiscordSubmitted(name, email, ifc, timeTaken, timeUp) {
+  const WEBHOOK = 'https://discord.com/api/webhooks/1490322686243508224/Cu6z16cBjYOHuIjCAzh3V6vyO1kQmKqhBPZz0QS-zBCrhdWFzYAwE18VxpdU0QrfdWiS';
+  await fetch(WEBHOOK, {
+    method:  'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      username: 'BV Exam System',
+      embeds: [{
+        title:  '📋 Exam Submitted',
+        color:  0x5865f2,
+        fields: [
+          {name: 'Applicant',    value: name,      inline: true},
+          {name: 'IFC',         value: ifc,       inline: true},
+          {name: 'Email',       value: email,     inline: true},
+          {name: 'Time used',   value: timeTaken, inline: true},
+          {name: 'Time expired',value: timeUp ? 'Yes ⏰' : 'No', inline: true},
+        ],
+        footer:    {text: 'Score wordt berekend door GAS — zie spreadsheet voor resultaat'},
+        timestamp: new Date().toISOString()
+      }]
+    })
+  }).catch(() => {});
 }
 </script>
 </body>
