@@ -58,20 +58,52 @@
 </footer>
 
 <script>
-const STAFF_PASS  = 'BrusselsVA,01';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec';
-const MAX_SCORE   = 27;
 
-let submissions = [];
+// JSONP — enige betrouwbare manier om GAS te bereiken
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const fn    = '_cb' + Date.now();
+    const s     = document.createElement('script');
+    const timer = setTimeout(() => { delete window[fn]; s.remove(); reject(new Error('Timeout')); }, 15000);
+    s.src       = url + '&callback=' + fn;
+    window[fn]  = data => { clearTimeout(timer); delete window[fn]; s.remove(); resolve(data); };
+    s.onerror   = ()   => { clearTimeout(timer); delete window[fn]; s.remove(); reject(new Error('Load error')); };
+    document.head.appendChild(s);
+  });
+}
 
-function login() {
-  const pass = document.getElementById('passInput').value;
-  if (pass !== STAFF_PASS) {
+function isAuthenticated() {
+  const token  = localStorage.getItem('bv_token');
+  const expiry = parseInt(localStorage.getItem('bv_token_expiry') || '0');
+  return token && Date.now() < expiry;
+}
+
+async function login() {
+  const pass = document.getElementById('passInput').value.trim();
+  if (!pass) return;
+
+  const btn = document.querySelector('.btn-red');
+  btn.textContent = 'Verifying...';
+  btn.disabled = true;
+
+  try {
+    const result = await jsonp(SCRIPT_URL + '?action=login&password=' + encodeURIComponent(pass));
+    if (result.success) {
+      localStorage.setItem('bv_token', result.token);
+      localStorage.setItem('bv_token_expiry', String(result.expiry));
+      showStaffPortal();
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+      btn.textContent = 'Access Results';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    document.getElementById('loginErr').textContent = '✗ Could not reach server. Please try again.';
     document.getElementById('loginErr').style.display = 'block';
-    return;
+    btn.textContent = 'Access Results';
+    btn.disabled = false;
   }
-  localStorage.setItem('bv_staff_auth', 'true');
-  showStaffPortal();
 }
 
 function showStaffPortal() {
@@ -81,59 +113,16 @@ function showStaffPortal() {
 }
 
 function logout() {
-  localStorage.removeItem('bv_staff_auth');
+  localStorage.removeItem('bv_token');
+  localStorage.removeItem('bv_token_expiry');
   location.reload();
 }
 
-// Automatisch inloggen als sessie al actief is
 window.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('bv_staff_auth') === 'true') {
+  if (isAuthenticated()) {
     showStaffPortal();
   }
 });
-
-
-
-
-
-
-function switchTab(tab) {
-  document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    t.classList.toggle('active', i===1);
-  });
-  document.getElementById('applicantsSection').style.display = 'block';
-  document.getElementById('detailSection').style.display     = 'none';
-  loadApplicants();
-}
-
-async function loadApplicants() {
-  document.getElementById('applicantsList').innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding:40px">Loading...</p>';
-  try {
-    const res = await fetch(SCRIPT_URL + '?type=applicants');
-    const rows = await res.json();
-    const apps = rows.map(r => ({
-      date: r.Date, name: r.Name, email: r.Email, ifc: r.IFC, notes: r.Notes
-    })).sort((a,b) => new Date(b.date) - new Date(a.date));
-
-    const stats = document.getElementById('appStatsRow');
-    stats.innerHTML = `<div class="stat-box"><div class="n">${apps.length}</div><div class="l">Total</div></div>`;
-
-    const el = document.getElementById('applicantsList');
-    if (!apps.length) {
-      el.innerHTML = '<div class="empty">No applications yet.</div>';
-      return;
-    }
-    el.innerHTML = apps.map(a => `
-      <div class="app-card">
-        <h3>${a.name}</h3>
-        <p>${a.ifc} · ${a.email}</p>
-        <p>${new Date(a.date).toLocaleString('nl-BE')}</p>
-        ${a.notes && a.notes !== '(none)' ? `<div class="notes">"${a.notes}"</div>` : ''}
-      </div>`).join('');
-  } catch(e) {
-    document.getElementById('applicantsList').innerHTML = `<p style="color:#ff6680;text-align:center;padding:40px">Could not load applicants: ${e.message}</p>`;
-  }
-}
 </script>
 </body>
 </html>
