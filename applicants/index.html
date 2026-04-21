@@ -180,22 +180,42 @@ function showDetail(i) {
     </div>`;
 }
 
+const APPLY_WEBHOOK = 'https://discord.com/api/webhooks/1102653530034155691/ILWW-wh-zlhOtdXUzCHiu4ZjzxvTEmOXQ72ms_MdjSM9ZYgYuw2xPMglL5teZrMcfsFE';
+
 async function setStatus(i, newStatus) {
   const a = apps[i];
   if (!a._row) { alert('Row not found — try refreshing.'); return; }
+
+  // Update in spreadsheet via GAS
   const params = new URLSearchParams({
     action: 'updateStatus',
     row:    String(a._row),
-    status: newStatus,
-    name:   a.name,
-    email:  a.email,
-    ifc:    a.ifc,
-    notes:  a.notes || ''
+    status: newStatus
   });
   fetch(SCRIPT_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+
+  // Discord melding vanuit browser — betrouwbaarder dan via GAS
+  const color = newStatus === 'Accepted' ? 0x00c864 : newStatus === 'Rejected' ? 0xe1002a : 0xffaa00;
+  const emoji = newStatus === 'Accepted' ? '✅' : newStatus === 'Rejected' ? '❌' : '⏳';
+  const fields = [
+    { name: 'Applicant',  value: a.name  || '?', inline: true },
+    { name: 'IFC',        value: a.ifc   || '?', inline: true },
+    { name: 'Email',      value: a.email || '?', inline: true },
+    { name: 'New Status', value: newStatus,       inline: false }
+  ];
+  if (a.notes && a.notes !== '(none)') fields.push({ name: 'Notes', value: a.notes, inline: false });
+  fetch(APPLY_WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username: 'ATLAS Application',
+      embeds: [{ title: emoji + ' Application ' + newStatus, color, fields, timestamp: new Date().toISOString() }]
+    })
+  }).catch(() => {});
+
+  // Update local cache en herlaad weergave
   apps[i].status = newStatus;
   sessionStorage.setItem('bv_applicants_cache', JSON.stringify(apps));
-  // Re-render both views
   const inDetail = document.getElementById('detailSection').style.display !== 'none';
   if (inDetail) showDetail(i);
   renderApplicants(apps);
