@@ -216,7 +216,8 @@ async function setStatus(i, newStatus) {
   const params = new URLSearchParams({
     action: 'updateStatus',
     row:    String(a._row),
-    status: newStatus
+    status: newStatus,
+    actor:  localStorage.getItem('bv_username') || 'unknown'
   });
   try {
     await jsonp(SCRIPT_URL + '?' + params.toString());
@@ -250,7 +251,8 @@ async function archiveApplicant(i) {
   const a = apps[i];
   if (!a._row) { alert('Row not found — try refreshing.'); return; }
   if (!confirm(`Archive applicant "${a.name}"?`)) return;
-  fetch(SCRIPT_URL + '?action=manualArchive&row=' + a._row, { mode: 'no-cors' }).catch(() => {});
+  const archiveParams = new URLSearchParams({ action: 'manualArchive', row: String(a._row), actor: localStorage.getItem('bv_username') || 'unknown' });
+  fetch(SCRIPT_URL + '?' + archiveParams.toString(), { mode: 'no-cors' }).catch(() => {});
   apps.splice(i, 1);
   sessionStorage.setItem('bv_applicants_cache', JSON.stringify(apps));
   showList();
