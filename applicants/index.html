@@ -56,7 +56,8 @@ let apps = [];
 window.addEventListener('DOMContentLoaded', () => {
   const token  = localStorage.getItem('bv_token');
   const expiry = parseInt(localStorage.getItem('bv_token_expiry') || '0');
-  if (!token || Date.now() >= expiry) {
+  const role   = localStorage.getItem('bv_role');
+  if (!token || Date.now() >= expiry || !role) {
     window.location.href = 'https://www.brusselsvirtual.be/stafflogin/';
     return;
   }
@@ -67,6 +68,8 @@ window.addEventListener('DOMContentLoaded', () => {
 function logout() {
   localStorage.removeItem('bv_token');
   localStorage.removeItem('bv_token_expiry');
+  localStorage.removeItem('bv_role');
+  localStorage.removeItem('bv_username');
   window.location.href = 'https://www.brusselsvirtual.be/stafflogin/';
 }
 
