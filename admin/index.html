@@ -107,6 +107,10 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
         <label>Password</label>
         <input type="password" id="newPass" placeholder="••••••••" autocomplete="new-password">
       </div>
+      <div class="form-field">
+        <label>Display Name (voornaam)</label>
+        <input type="text" id="newDisplayName" placeholder="e.g. Thomas">
+      </div>
       <div class="form-field" style="max-width:160px">
         <label>Role</label>
         <select id="newRole">
@@ -131,6 +135,23 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
       <button onclick="loadLogs(true)" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:var(--muted);font-family:'Nunito Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border-radius:5px;cursor:pointer">↻ Refresh</button>
     </div>
     <div id="logList"><div class="empty">Loading...</div></div>
+  </div>
+</div>
+
+<!-- EDIT DISPLAY NAME MODAL -->
+<div class="modal-overlay" id="nameModal">
+  <div class="modal">
+    <h3>Edit Display Name</h3>
+    <p id="nameModalUser"></p>
+    <div class="modal-field">
+      <label>Display Name (voornaam)</label>
+      <input type="text" id="newNameModal" placeholder="e.g. Thomas" autocomplete="off">
+    </div>
+    <div class="msg" id="nameMsg"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" onclick="confirmNameChange()">Save</button>
+    </div>
   </div>
 </div>
 
@@ -264,10 +285,11 @@ async function loadAccounts() {
     el.innerHTML = accounts.map(a => `
       <div class="account-card">
         <div class="account-info">
-          <h3>${a.username} <span class="role-badge role-${a.role}">${a.role}</span></h3>
-          <p>Created: ${new Date(a.createdAt).toLocaleString('nl-BE')}</p>
+          <h3>${a.displayName || a.username} <span class="role-badge role-${a.role}">${a.role}</span></h3>
+          <p style="margin-bottom:2px">@${a.username} · Created: ${new Date(a.createdAt).toLocaleString('nl-BE')}</p>
         </div>
         <div class="account-actions">
+          <button class="btn-sm btn-change" onclick="openNameModal('${a.username}','${a.displayName || ''}')">Edit Name</button>
           <button class="btn-sm btn-change" onclick="openChangeModal('${a.username}')">Change Password</button>
           ${a.username !== me ? `<button class="btn-sm btn-delete" onclick="openDeleteModal('${a.username}')">Delete</button>` : '<span style="font-size:10px;color:var(--muted);padding:7px 8px">(you)</span>'}
         </div>
@@ -288,15 +310,38 @@ async function addAccount() {
   if (password.length < 6)   { showMsg(msg, 'error', 'Password must be at least 6 characters.'); return; }
 
   try {
-    const res = await jsonp(SCRIPT_URL + '?action=addAccount&newUsername=' + encodeURIComponent(username) + '&newPassword=' + encodeURIComponent(password) + '&role=' + role + '&actor=' + encodeURIComponent(localStorage.getItem('bv_username') || 'unknown'));
+    const displayName = document.getElementById('newDisplayName').value.trim();
+    const res = await jsonp(SCRIPT_URL + '?action=addAccount&newUsername=' + encodeURIComponent(username) + '&newPassword=' + encodeURIComponent(password) + '&role=' + role + '&displayName=' + encodeURIComponent(displayName) + '&actor=' + encodeURIComponent(localStorage.getItem('bv_username') || 'unknown'));
     if (res.success) {
       showMsg(msg, 'success', 'Account created successfully.');
-      document.getElementById('newUser').value = '';
-      document.getElementById('newPass').value = '';
+      document.getElementById('newUser').value        = '';
+      document.getElementById('newPass').value        = '';
+      document.getElementById('newDisplayName').value = '';
       loadAccounts();
     } else {
       showMsg(msg, 'error', res.error || 'Could not create account.');
     }
+  } catch(e) {
+    showMsg(msg, 'error', 'Server error. Please try again.');
+  }
+}
+
+function openNameModal(username, currentName) {
+  pendingTarget = username;
+  document.getElementById('nameModalUser').textContent = 'Edit display name for: ' + username;
+  document.getElementById('newNameModal').value = currentName;
+  document.getElementById('nameMsg').style.display = 'none';
+  document.getElementById('nameModal').classList.add('open');
+}
+
+async function confirmNameChange() {
+  const newName = document.getElementById('newNameModal').value.trim();
+  const msg     = document.getElementById('nameMsg');
+  if (!newName) { showMsg(msg, 'error', 'Enter a display name.'); return; }
+  try {
+    const res = await jsonp(SCRIPT_URL + '?action=updateDisplayName&targetUsername=' + encodeURIComponent(pendingTarget) + '&displayName=' + encodeURIComponent(newName) + '&actor=' + encodeURIComponent(localStorage.getItem('bv_username') || 'unknown'));
+    if (res.success) { closeModal(); loadAccounts(); }
+    else { showMsg(msg, 'error', res.error || 'Could not update name.'); }
   } catch(e) {
     showMsg(msg, 'error', 'Server error. Please try again.');
   }
@@ -318,6 +363,7 @@ function openDeleteModal(username) {
 }
 
 function closeModal() {
+  document.getElementById('nameModal').classList.remove('open');
   document.getElementById('changeModal').classList.remove('open');
   document.getElementById('deleteModal').classList.remove('open');
   pendingTarget = null;
