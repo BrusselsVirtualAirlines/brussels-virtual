@@ -33,17 +33,23 @@
     <div class="nav-tab" onclick="window.location.href='https://www.brusselsvirtual.be/examresults/'">Exam Results</div>
     <div class="nav-tab" onclick="window.location.href='https://www.brusselsvirtual.be/applicants/'">Applicants</div>
     <div class="nav-tab" onclick="window.location.href='https://www.brusselsvirtual.be/archive/'">Archive</div>
+    <div class="nav-tab" id="adminTab" onclick="window.location.href='https://www.brusselsvirtual.be/admin/'" style="display:none">⚙ Accounts</div>
   </div>
 
   <!-- LOGIN -->
   <div id="loginSection">
     <div class="field">
-      <label>Staff Password</label>
-      <input type="password" id="passInput" placeholder="••••••••••" onkeydown="if(event.key==='Enter')login()" oninput="this.value=this.value.replace(/\s/g,'')">
+      <label>Username</label>
+      <input type="text" id="userInput" placeholder="username" onkeydown="if(event.key==='Enter')login()" autocomplete="username">
     </div>
-    <button class="btn-red" onclick="login()">Access Results</button>
-    <div class="err" id="loginErr">✗ Incorrect password.</div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="passInput" placeholder="••••••••••" onkeydown="if(event.key==='Enter')login()" oninput="this.value=this.value.replace(/\s/g,'')" autocomplete="current-password">
+    </div>
+    <button class="btn-red" onclick="login()">Access Portal</button>
+    <div class="err" id="loginErr">✗ Incorrect username or password.</div>
   </div>
+  <div id="welcomeMsg" style="display:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-weight:700"></div>
 
 
 
@@ -60,7 +66,6 @@
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec';
 
-// JSONP — enige betrouwbare manier om GAS te bereiken
 function jsonp(url) {
   return new Promise((resolve, reject) => {
     const fn    = '_cb' + Date.now();
@@ -79,48 +84,65 @@ function isAuthenticated() {
   return token && Date.now() < expiry;
 }
 
+function getRole() {
+  return localStorage.getItem('bv_role') || 'moderator';
+}
+
 async function login() {
-  const pass = document.getElementById('passInput').value.trim();
-  if (!pass) return;
+  const username = document.getElementById('userInput').value.trim();
+  const pass     = document.getElementById('passInput').value.trim();
+  if (!username || !pass) return;
 
   const btn = document.querySelector('.btn-red');
   btn.textContent = 'Verifying...';
   btn.disabled = true;
 
   try {
-    const result = await jsonp(SCRIPT_URL + '?action=login&password=' + encodeURIComponent(pass));
+    const result = await jsonp(SCRIPT_URL + '?action=login&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(pass));
     if (result.success) {
-      localStorage.setItem('bv_token', result.token);
+      localStorage.setItem('bv_token',        result.token);
       localStorage.setItem('bv_token_expiry', String(result.expiry));
-      showStaffPortal();
+      localStorage.setItem('bv_role',         result.role);
+      localStorage.setItem('bv_username',     result.username);
+      showStaffPortal(result.role);
     } else {
       document.getElementById('loginErr').style.display = 'block';
-      btn.textContent = 'Access Results';
+      btn.textContent = 'Access Portal';
       btn.disabled = false;
     }
   } catch(e) {
     document.getElementById('loginErr').textContent = '✗ Could not reach server. Please try again.';
     document.getElementById('loginErr').style.display = 'block';
-    btn.textContent = 'Access Results';
+    btn.textContent = 'Access Portal';
     btn.disabled = false;
   }
 }
 
-function showStaffPortal() {
+function showStaffPortal(role) {
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('navTabs').style.display      = 'flex';
   document.getElementById('logoutBtn').style.display    = 'inline-flex';
+  // Admin-only tab
+  if (role === 'admin') {
+    document.getElementById('adminTab').style.display = 'flex';
+  }
+  // Toon gebruikersnaam
+  const name = localStorage.getItem('bv_username') || '';
+  document.getElementById('welcomeMsg').textContent = 'Welcome, ' + name;
+  document.getElementById('welcomeMsg').style.display = 'block';
 }
 
 function logout() {
   localStorage.removeItem('bv_token');
   localStorage.removeItem('bv_token_expiry');
+  localStorage.removeItem('bv_role');
+  localStorage.removeItem('bv_username');
   location.reload();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   if (isAuthenticated()) {
-    showStaffPortal();
+    showStaffPortal(getRole());
   }
 });
 </script>
