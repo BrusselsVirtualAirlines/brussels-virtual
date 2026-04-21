@@ -182,19 +182,38 @@ function showDetail(i) {
 
 const APPLY_WEBHOOK = 'https://discord.com/api/webhooks/1102653530034155691/ILWW-wh-zlhOtdXUzCHiu4ZjzxvTEmOXQ72ms_MdjSM9ZYgYuw2xPMglL5teZrMcfsFE';
 
+// JSONP — enige betrouwbare manier om GAS te bereiken én respons te lezen
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const fn    = '_cb' + Date.now();
+    const s     = document.createElement('script');
+    const timer = setTimeout(() => { delete window[fn]; s.remove(); reject(new Error('Timeout')); }, 15000);
+    s.src       = url + '&callback=' + fn;
+    window[fn]  = data => { clearTimeout(timer); delete window[fn]; s.remove(); resolve(data); };
+    s.onerror   = ()   => { clearTimeout(timer); delete window[fn]; s.remove(); reject(new Error('Load error')); };
+    document.head.appendChild(s);
+  });
+}
+
 async function setStatus(i, newStatus) {
   const a = apps[i];
   if (!a._row) { alert('Row not found — try refreshing.'); return; }
 
-  // Update in spreadsheet via GAS
-  const params = new URLSearchParams({
-    action: 'updateStatus',
-    row:    String(a._row),
-    status: newStatus
-  });
-  fetch(SCRIPT_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+  // Update in spreadsheet via JSONP — betrouwbaar, bevestigt of het gelukt is
+  try {
+    const params = new URLSearchParams({
+      action: 'updateStatus',
+      row:    String(a._row),
+      status: newStatus
+    });
+    await jsonp(SCRIPT_URL + '?' + params.toString());
+  } catch(e) {
+    console.error('Status update failed:', e);
+    alert('Could not update status. Please try again.');
+    return;
+  }
 
-  // Discord melding vanuit browser — betrouwbaarder dan via GAS
+  // Discord melding vanuit browser
   const color = newStatus === 'Accepted' ? 0x00c864 : newStatus === 'Rejected' ? 0xe1002a : 0xffaa00;
   const emoji = newStatus === 'Accepted' ? '✅' : newStatus === 'Rejected' ? '❌' : '⏳';
   const fields = [
@@ -211,7 +230,7 @@ async function setStatus(i, newStatus) {
       username: 'ATLAS Application',
       embeds: [{ title: emoji + ' Application ' + newStatus, color, fields, timestamp: new Date().toISOString() }]
     })
-  }).catch(() => {});
+  }).catch(err => console.error('Discord error:', err));
 
   // Update local cache en herlaad weergave
   apps[i].status = newStatus;
