@@ -104,6 +104,7 @@ async function login() {
       localStorage.setItem('bv_token_expiry', String(result.expiry));
       localStorage.setItem('bv_role',         result.role);
       localStorage.setItem('bv_username',     result.username);
+      localStorage.setItem('bv_displayname',  result.displayName || result.username);
       showStaffPortal(result.role);
     } else {
       document.getElementById('loginErr').style.display = 'block';
@@ -127,7 +128,7 @@ function showStaffPortal(role) {
     document.getElementById('adminTab').style.display = 'flex';
   }
   // Toon gebruikersnaam
-  const name = localStorage.getItem('bv_username') || '';
+  const name = localStorage.getItem('bv_displayname') || localStorage.getItem('bv_username') || '';
   document.getElementById('welcomeMsg').textContent = 'Welcome, ' + name;
   document.getElementById('welcomeMsg').style.display = 'block';
 }
@@ -137,6 +138,7 @@ function logout() {
   localStorage.removeItem('bv_token_expiry');
   localStorage.removeItem('bv_role');
   localStorage.removeItem('bv_username');
+  localStorage.removeItem('bv_displayname');
   location.reload();
 }
 
