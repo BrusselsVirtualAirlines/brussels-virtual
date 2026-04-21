@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brussels Virtual – Applicants</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>:root{--red:#e1002a;--white:#ffffff;--muted:rgba(255,255,255,0.55)}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito Sans',sans-serif;min-height:100vh;background:radial-gradient(ellipse at 18% 35%,#8a97b8 0%,#5a6a96 28%,#2a3a72 58%,#111e4a 100%);color:var(--white)}@keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}.detail-header{display:flex;align-items:center;justify-content:space-between;padding:36px 48px 0;animation:fadeDown .6s cubic-bezier(.22,1,.36,1) both}.back-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:white;font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:6px;text-decoration:none;cursor:pointer;transition:all .2s}.back-btn:hover{background:rgba(255,255,255,.15)}.back-btn svg{width:14px;height:14px;fill:white}.detail-logo img{height:clamp(100px,16vw,160px);width:auto}.body{padding:48px;max-width:900px;margin:0 auto;animation:fadeUp .7s cubic-bezier(.22,1,.36,1) .1s both}.detail-title{font-size:13px;letter-spacing:5px;text-transform:uppercase;font-weight:600;margin-bottom:6px}.detail-rank-name{font-size:clamp(32px,5vw,56px);font-weight:900;letter-spacing:-1px;line-height:1;margin-bottom:6px}.detail-divider{width:48px;height:3px;background:var(--red);border-radius:2px;margin-bottom:36px}.btn-red{display:block;width:100%;padding:15px;background:var(--red);color:white;font-family:'Nunito Sans',sans-serif;font-size:12px;font-weight:800;letter-spacing:4px;text-transform:uppercase;border:none;border-radius:4px;cursor:pointer;transition:all .22s;box-shadow:0 8px 32px rgba(225,0,42,0.4)}.btn-red:hover{background:#ff1438;transform:translateY(-2px)}.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px 24px;margin-bottom:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:space-between;gap:16px}.card:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px)}.card-left h3{font-size:16px;font-weight:800;margin-bottom:4px}.card-left p{font-size:11px;color:var(--muted);letter-spacing:1px}.card-right{text-align:right;flex-shrink:0}.score-big{font-size:28px;font-weight:900;letter-spacing:-1px}.badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-top:4px}.pass{color:#4dffaa;background:rgba(0,200,100,0.15);border:1px solid rgba(0,200,100,0.3)}.fail{color:#ff6680;background:rgba(225,0,42,0.15);border:1px solid rgba(225,0,42,0.3)}.detail-view{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;margin-bottom:24px}.detail-view h2{font-size:22px;font-weight:900;margin-bottom:4px}.detail-view .meta{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:24px}.answer-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07)}.answer-row:last-child{border-bottom:none}.ans-icon{width:24px;height:24px;min-width:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-top:1px}.ans-icon.c{background:rgba(0,200,100,0.2);color:#4dffaa}.ans-icon.w{background:rgba(225,0,42,0.2);color:#ff6680}.ans-q{flex:1}.ans-q .qtext{font-size:12px;font-weight:700;margin-bottom:4px;line-height:1.4}.ans-q .chosen{font-size:11px;color:var(--muted)}.ans-q .chosen.wrong{color:#ff6680}.ans-q .correct-ans{font-size:11px;color:#4dffaa;margin-top:2px}.atc-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-left:6px;vertical-align:middle}.back-list{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;background:none;font-family:inherit;font-weight:700;padding:0;margin-bottom:24px;transition:color .2s}.back-list:hover{color:var(--white)}.empty{text-align:center;padding:60px;color:var(--muted);font-size:14px}.stats-row{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}.stat-box{flex:1;min-width:120px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px;text-align:center}.stat-box .n{font-size:28px;font-weight:900;letter-spacing:-1px}.stat-box .l{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:4px}footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);font-weight:600}.made-by{position:absolute;right:24px;top:50%;transform:translateY(-50%);text-align:right;line-height:1.5}.made-by span{display:block;font-size:9px;letter-spacing:1px;text-transform:none;color:rgba(255,255,255,.3);font-weight:600}.made-by span.for{font-size:8px;color:rgba(255,255,255,.18)}</style>
+</head>
+<body>
+
+<div class="detail-header">
+  <a class="back-btn" href="https://www.brusselsvirtual.be/stafflogin/">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Back
+  </a>
+  <button class="back-btn" id="logoutBtn" onclick="logout()" style="display:none;margin-left:12px;background:rgba(225,0,42,0.15);border-color:rgba(225,0,42,0.4)">
+    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    Logout
+  </button>
+  <div class="detail-logo" style="margin-left:auto">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwsAAAMLCAYAAAABpgu6AABa9UlEQVR4nO3deXhdVb3/8fdKyywKiNCmqMxim7QMioIT4IADKE6oOKGoiMNVvI5XveKsoF7U64DifBEVZ3BAUZxwRIE2RVEBFZIWVERAQNqc9ftjJb+GdCXnnH32cJK+X88TQnP2Xvt7Tk6S/dl7DSHGiCRJkiRNN9B0AZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrZhQZIkSZL6k2FBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUpZhQZIkSVKWYUGSJElSlmFBkiRJUrb/D3jq9pZjkVSDAAAAAElFTkSuQmCC" alt="Brussels Virtual">
+  </div>
+</div>
+
+<div class="body">
+  <div class="detail-title">Brussels Virtual</div>
+  <div class="detail-rank-name">Applicants</div>
+  <div class="detail-divider"></div>
+
+  <!-- LIST VIEW -->
+  <div id="listSection">
+    <div class="stats-row" id="statsRow"></div>
+    <div id="submissionList"></div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div id="detailSection" style="display:none">
+    <button class="back-list" onclick="showList()">← Back to list</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<footer>Brussels Virtual – Staff Portal
+  <div class="made-by">
+    <span>Made by avandemaele_SN</span>
+    <span class="for">for SNVA</span>
+  </div>
+</footer>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec';
+
+let apps = [];
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('bv_staff_auth') !== 'true') {
+    window.location.href = 'https://www.brusselsvirtual.be/stafflogin/';
+    return;
+  }
+  document.getElementById('logoutBtn').style.display = 'inline-flex';
+  loadApplicants();
+});
+
+function logout() {
+  localStorage.removeItem('bv_staff_auth');
+  window.location.href = 'https://www.brusselsvirtual.be/stafflogin/';
+}
+
+async function loadApplicants(force=false) {
+  const cacheKey = 'bv_applicants_cache';
+  const cached = sessionStorage.getItem(cacheKey);
+  if (cached && !force) {
+    apps = JSON.parse(cached);
+    renderApplicants(apps);
+    return;
+  }
+  document.getElementById('submissionList').innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding:40px">Loading...</p>';
+  try {
+    const res  = await fetch(SCRIPT_URL + '?type=applicants');
+    const rows = await res.json();
+    apps = rows.map(r => ({
+      _row:    r._row,
+      date:    r.Date,
+      name:    r.Name,
+      email:   r.Email,
+      ifc:     r.IFC,
+      notes:   r.Notes,
+      status:  r.Status || 'Pending',
+      ifclink: r['IFC Link'] || ''
+    })).sort((a,b) => new Date(b.date) - new Date(a.date));
+    sessionStorage.setItem(cacheKey, JSON.stringify(apps));
+    renderApplicants(apps);
+  } catch(e) {
+    document.getElementById('submissionList').innerHTML = `<p style="color:#ff6680;text-align:center;padding:40px">Could not load applicants: ${e.message}</p>`;
+  }
+}
+
+function statusColor(s) {
+  return s === 'Accepted' ? '#4dffaa' : s === 'Rejected' ? '#ff6680' : '#ffaa00';
+}
+
+function statusBtns(i, current) {
+  return ['Pending','Accepted','Rejected'].map(s => {
+    const active = s === current;
+    const c = statusColor(s);
+    return `<button onclick="event.stopPropagation();setStatus(${i},'${s}')" style="background:${active ? c+'33' : 'rgba(255,255,255,0.05)'};border:1px solid ${active ? c : 'rgba(255,255,255,0.15)'};color:${active ? c : 'var(--muted)'};font-family:'Nunito Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .2s">${s}</button>`;
+  }).join('');
+}
+
+function renderApplicants(data) {
+  const stats = document.getElementById('statsRow');
+  const el    = document.getElementById('submissionList');
+
+  document.getElementById('refreshBtn')?.remove();
+  const refreshBtn = document.createElement('button');
+  refreshBtn.id = 'refreshBtn';
+  refreshBtn.className = 'btn-red';
+  refreshBtn.style.cssText = 'width:auto;padding:10px 24px;margin-bottom:16px;font-size:10px';
+  refreshBtn.textContent = '↻ Refresh';
+  refreshBtn.onclick = () => loadApplicants(true);
+  document.getElementById('listSection').insertBefore(refreshBtn, stats);
+
+  const pending  = data.filter(a => !a.status || a.status === 'Pending').length;
+  const accepted = data.filter(a => a.status === 'Accepted').length;
+  const rejected = data.filter(a => a.status === 'Rejected').length;
+
+  stats.innerHTML = `
+    <div class="stat-box"><div class="n">${data.length}</div><div class="l">Total</div></div>
+    <div class="stat-box"><div class="n" style="color:#ffaa00">${pending}</div><div class="l">Pending</div></div>
+    <div class="stat-box"><div class="n" style="color:#4dffaa">${accepted}</div><div class="l">Accepted</div></div>
+    <div class="stat-box"><div class="n" style="color:#ff6680">${rejected}</div><div class="l">Rejected</div></div>`;
+
+  if (!data.length) { el.innerHTML = '<div class="empty">No applications yet.</div>'; return; }
+
+  el.innerHTML = data.map((a, i) => {
+    const c = statusColor(a.status || 'Pending');
+    return `
+    <div class="card" style="cursor:default;flex-wrap:wrap;gap:12px">
+      <div onclick="showDetail(${i})" style="cursor:pointer;flex:1;min-width:200px">
+        <h3>${a.name}</h3>
+        <p>${a.ifc} · ${a.email}</p>
+        <p style="margin-top:4px">${new Date(a.date).toLocaleString('nl-BE')}</p>
+        ${a.notes && a.notes !== '(none)' ? `<p style="margin-top:6px;font-size:12px;font-style:italic;color:rgba(255,255,255,0.55)">"${a.notes}"</p>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+        <div class="badge" style="color:${c};background:${c}22;border:1px solid ${c}55;font-size:10px;padding:4px 12px">${a.status || 'Pending'}</div>
+        ${a.ifclink ? `<a href="${a.ifclink}" target="_blank" onclick="event.stopPropagation()" style="color:var(--red);font-size:9px;font-weight:700;letter-spacing:1px;text-decoration:none">IFC PROFILE →</a>` : ''}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${statusBtns(i, a.status || 'Pending')}</div>
+        <button onclick="event.stopPropagation();archiveApplicant(${i})" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--muted);font-family:'Nunito Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(225,0,42,0.15)';this.style.borderColor='rgba(225,0,42,0.4)';this.style.color='#ff6680'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--muted)'">Archive</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showDetail(i) {
+  const a = apps[i];
+  document.getElementById('listSection').style.display   = 'none';
+  document.getElementById('detailSection').style.display = 'block';
+  const c = statusColor(a.status || 'Pending');
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-view">
+      <h2>${a.name}</h2>
+      <div class="meta">${a.ifc} · ${a.email} · Applied: ${new Date(a.date).toLocaleString('nl-BE')}</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="n" style="color:${c};font-size:16px">${a.status || 'Pending'}</div><div class="l">Status</div></div>
+        ${a.ifclink ? `<div class="stat-box"><div class="n" style="font-size:14px"><a href="${a.ifclink}" target="_blank" style="color:var(--red);text-decoration:none">View →</a></div><div class="l">IFC Profile</div></div>` : ''}
+      </div>
+      ${a.notes && a.notes !== '(none)' ? `<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:20px;margin-bottom:20px;font-size:14px;font-style:italic;color:rgba(255,255,255,0.75)">"${a.notes}"</div>` : ''}
+      <div style="margin-bottom:16px">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px">Update Status</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">${['Pending','Accepted','Rejected'].map(s => {
+          const active = s === (a.status || 'Pending');
+          const sc = statusColor(s);
+          return `<button onclick="setStatus(${i},'${s}')" style="background:${active ? sc+'33' : 'rgba(255,255,255,0.07)'};border:1px solid ${active ? sc : 'rgba(255,255,255,0.15)'};color:${active ? sc : 'var(--muted)'};font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:6px;cursor:pointer;transition:all .2s">${s}</button>`;
+        }).join('')}</div>
+      </div>
+      <button onclick="archiveApplicant(${i})" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--muted);font-family:'Nunito Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:6px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(225,0,42,0.15)';this.style.borderColor='rgba(225,0,42,0.4)';this.style.color='#ff6680'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--muted)'">Archive applicant</button>
+    </div>`;
+}
+
+async function setStatus(i, newStatus) {
+  const a = apps[i];
+  if (!a._row) { alert('Row not found — try refreshing.'); return; }
+  const params = new URLSearchParams({
+    action: 'updateStatus',
+    row:    String(a._row),
+    status: newStatus,
+    name:   a.name,
+    email:  a.email,
+    ifc:    a.ifc,
+    notes:  a.notes || ''
+  });
+  fetch(SCRIPT_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+  apps[i].status = newStatus;
+  sessionStorage.setItem('bv_applicants_cache', JSON.stringify(apps));
+  // Re-render both views
+  const inDetail = document.getElementById('detailSection').style.display !== 'none';
+  if (inDetail) showDetail(i);
+  renderApplicants(apps);
+}
+
+async function archiveApplicant(i) {
+  const a = apps[i];
+  if (!a._row) { alert('Row not found — try refreshing.'); return; }
+  if (!confirm(`Archive applicant "${a.name}"?`)) return;
+  fetch(SCRIPT_URL + '?action=manualArchive&row=' + a._row, { mode: 'no-cors' }).catch(() => {});
+  apps.splice(i, 1);
+  sessionStorage.setItem('bv_applicants_cache', JSON.stringify(apps));
+  showList();
+  renderApplicants(apps);
+}
+
+function showList() {
+  document.getElementById('detailSection').style.display = 'none';
+  document.getElementById('listSection').style.display   = 'block';
+}
+</script>
+</body>
+</html>
