@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brussels Virtual – Account Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--red:#e1002a;--white:#ffffff;--muted:rgba(255,255,255,0.55)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito Sans',sans-serif;min-height:100vh;background:radial-gradient(ellipse at 18% 35%,#8a97b8 0%,#5a6a96 28%,#2a3a72 58%,#111e4a 100%);color:var(--white)}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.detail-header{display:flex;align-items:center;justify-content:space-between;padding:36px 48px 0;animation:fadeDown .6s cubic-bezier(.22,1,.36,1) both}
+.back-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:white;font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:6px;text-decoration:none;cursor:pointer;transition:all .2s}
+.back-btn:hover{background:rgba(255,255,255,.15)}
+.back-btn svg{width:14px;height:14px;fill:white}
+.detail-logo img{height:clamp(80px,12vw,120px);width:auto}
+.body{padding:48px;max-width:800px;margin:0 auto;animation:fadeUp .7s cubic-bezier(.22,1,.36,1) .1s both}
+.detail-title{font-size:13px;letter-spacing:5px;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.detail-rank-name{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.detail-divider{width:48px;height:3px;background:var(--red);border-radius:2px;margin-bottom:36px}
+.section-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:16px}
+.account-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:18px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.account-info h3{font-size:15px;font-weight:800;margin-bottom:4px}
+.account-info p{font-size:11px;color:var(--muted);letter-spacing:1px}
+.role-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-left:8px}
+.role-admin{color:#b388ff;background:rgba(179,136,255,0.15);border:1px solid rgba(179,136,255,0.3)}
+.role-moderator{color:#4dffaa;background:rgba(0,200,100,0.15);border:1px solid rgba(0,200,100,0.3)}
+.account-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-sm{font-family:'Nunito Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s;border:1px solid}
+.btn-change{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.2);color:var(--muted)}
+.btn-change:hover{background:rgba(255,255,255,0.12);color:var(--white);border-color:rgba(255,255,255,0.4)}
+.btn-delete{background:rgba(225,0,42,0.1);border-color:rgba(225,0,42,0.3);color:#ff6680}
+.btn-delete:hover{background:rgba(225,0,42,0.25);border-color:rgba(225,0,42,0.6)}
+.add-form{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:32px}
+.form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.form-field{flex:1;min-width:140px}
+.form-field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:6px}
+.form-field input,.form-field select{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:10px 14px;color:var(--white);font-family:'Nunito Sans',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color .2s}
+.form-field input:focus,.form-field select:focus{border-color:rgba(225,0,42,0.5)}
+.form-field select option{background:#2a3a72;color:white}
+.btn-add{background:var(--red);border:none;color:white;font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:11px 28px;border-radius:5px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(225,0,42,0.35)}
+.btn-add:hover{background:#ff1438;transform:translateY(-2px)}
+.msg{padding:10px 16px;border-radius:7px;font-size:12px;font-weight:700;letter-spacing:1px;margin-top:10px;display:none}
+.msg.success{color:#4dffaa;background:rgba(0,200,100,0.1);border:1px solid rgba(0,200,100,0.25)}
+.msg.error{color:#ff6680;background:rgba(225,0,42,0.1);border:1px solid rgba(225,0,42,0.25)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:999}
+.modal-overlay.open{display:flex}
+.modal{background:linear-gradient(135deg,#2a3a72,#1a2a62);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:32px;width:100%;max-width:380px}
+.modal h3{font-size:18px;font-weight:900;margin-bottom:6px}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:20px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:6px}
+.modal-field input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:11px 14px;color:var(--white);font-family:'Nunito Sans',sans-serif;font-size:13px;font-weight:600;outline:none}
+.modal-field input:focus{border-color:rgba(225,0,42,0.5)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions button{flex:1;font-family:'Nunito Sans',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:11px;border-radius:5px;cursor:pointer;border:none;transition:all .2s}
+.modal-cancel{background:rgba(255,255,255,0.08);color:var(--muted)}
+.modal-cancel:hover{background:rgba(255,255,255,0.15);color:var(--white)}
+.modal-confirm{background:var(--red);color:white;box-shadow:0 4px 16px rgba(225,0,42,0.35)}
+.modal-confirm:hover{background:#ff1438}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);font-weight:600}
+.made-by{position:absolute;right:24px;top:50%;transform:translateY(-50%);text-align:right;line-height:1.5}
+.made-by span{display:block;font-size:9px;letter-spacing:1px;text-transform:none;color:rgba(255,255,255,.3);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="detail-header">
+  <a class="back-btn" href="https://www.brusselsvirtual.be/stafflogin/">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Back
+  </a>
+  <button class="back-btn" id="logoutBtn" onclick="logout()" style="display:none;margin-left:12px;background:rgba(225,0,42,0.15);border-color:rgba(225,0,42,0.4);cursor:pointer">
+    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    Logout
+  </button>
+  <div class="detail-logo" style="margin-left:auto">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwsAAAMLCAYAAAABpgu6AABa9UlEQVR4nO3deXhdVb3..." alt="Brussels Virtual">
+  </div>
+</div>
+
+<div class="body">
+  <div class="detail-title">Brussels Virtual</div>
+  <div class="detail-rank-name">Account Management</div>
+  <div class="detail-divider"></div>
+
+  <!-- ADD ACCOUNT -->
+  <div class="section-label">Add New Account</div>
+  <div class="add-form">
+    <div class="form-row">
+      <div class="form-field">
+        <label>Username</label>
+        <input type="text" id="newUser" placeholder="e.g. john_doe" autocomplete="off">
+      </div>
+      <div class="form-field">
+        <label>Password</label>
+        <input type="password" id="newPass" placeholder="••••••••" autocomplete="new-password">
+      </div>
+      <div class="form-field" style="max-width:160px">
+        <label>Role</label>
+        <select id="newRole">
+          <option value="moderator">Moderator</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-add" onclick="addAccount()">+ Add Account</button>
+    <div class="msg" id="addMsg"></div>
+  </div>
+
+  <!-- ACCOUNT LIST -->
+  <div class="section-label">Existing Accounts</div>
+  <div id="accountList"><div class="empty">Loading...</div></div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-overlay" id="changeModal">
+  <div class="modal">
+    <h3>Change Password</h3>
+    <p id="changeModalUser"></p>
+    <div class="modal-field">
+      <label>New Password</label>
+      <input type="password" id="newPassModal" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="modal-field">
+      <label>Confirm Password</label>
+      <input type="password" id="confirmPassModal" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="msg" id="changeMsg"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" onclick="confirmChange()">Save Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <h3>Delete Account</h3>
+    <p id="deleteModalUser"></p>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" style="background:#e1002a" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<footer>Brussels Virtual – Admin Portal
+  <div class="made-by">
+    <span>Made by avandemaele_SN</span>
+    <span class="for">for SNVA</span>
+  </div>
+</footer>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9xnFjctN_JGq6OKjW7NOg_oCog1rOrtBobHsV4Cp-ucLJnQK3GyfUzk_vuUlS9mHK/exec';
+
+let pendingTarget = null;
+
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const fn    = '_cb' + Date.now();
+    const s     = document.createElement('script');
+    const timer = setTimeout(() => { delete window[fn]; s.remove(); reject(new Error('Timeout')); }, 15000);
+    s.src       = url + '&callback=' + fn;
+    window[fn]  = data => { clearTimeout(timer); delete window[fn]; s.remove(); resolve(data); };
+    s.onerror   = ()   => { clearTimeout(timer); delete window[fn]; s.remove(); reject(new Error('Load error')); };
+    document.head.appendChild(s);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const token  = localStorage.getItem('bv_token');
+  const expiry = parseInt(localStorage.getItem('bv_token_expiry') || '0');
+  const role   = localStorage.getItem('bv_role');
+  if (!token || Date.now() >= expiry || role !== 'admin') {
+    window.location.href = 'https://www.brusselsvirtual.be/stafflogin/';
+    return;
+  }
+  document.getElementById('logoutBtn').style.display = 'inline-flex';
+  loadAccounts();
+});
+
+function logout() {
+  localStorage.removeItem('bv_token');
+  localStorage.removeItem('bv_token_expiry');
+  localStorage.removeItem('bv_role');
+  localStorage.removeItem('bv_username');
+  window.location.href = 'https://www.brusselsvirtual.be/stafflogin/';
+}
+
+async function loadAccounts() {
+  try {
+    const accounts = await jsonp(SCRIPT_URL + '?action=listAccounts');
+    const el = document.getElementById('accountList');
+    if (!accounts.length) { el.innerHTML = '<div class="empty">No accounts found.</div>'; return; }
+    const me = localStorage.getItem('bv_username') || '';
+    el.innerHTML = accounts.map(a => `
+      <div class="account-card">
+        <div class="account-info">
+          <h3>${a.username} <span class="role-badge role-${a.role}">${a.role}</span></h3>
+          <p>Created: ${new Date(a.createdAt).toLocaleString('nl-BE')}</p>
+        </div>
+        <div class="account-actions">
+          <button class="btn-sm btn-change" onclick="openChangeModal('${a.username}')">Change Password</button>
+          ${a.username !== me ? `<button class="btn-sm btn-delete" onclick="openDeleteModal('${a.username}')">Delete</button>` : '<span style="font-size:10px;color:var(--muted);padding:7px 8px">(you)</span>'}
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('accountList').innerHTML = `<div class="empty" style="color:#ff6680">Could not load accounts.</div>`;
+  }
+}
+
+async function addAccount() {
+  const username = document.getElementById('newUser').value.trim().toLowerCase();
+  const password = document.getElementById('newPass').value;
+  const role     = document.getElementById('newRole').value;
+  const msg      = document.getElementById('addMsg');
+  msg.style.display = 'none';
+
+  if (!username || !password) { showMsg(msg, 'error', 'Please fill in all fields.'); return; }
+  if (password.length < 6)   { showMsg(msg, 'error', 'Password must be at least 6 characters.'); return; }
+
+  try {
+    const res = await jsonp(SCRIPT_URL + '?action=addAccount&newUsername=' + encodeURIComponent(username) + '&newPassword=' + encodeURIComponent(password) + '&role=' + role);
+    if (res.success) {
+      showMsg(msg, 'success', 'Account created successfully.');
+      document.getElementById('newUser').value = '';
+      document.getElementById('newPass').value = '';
+      loadAccounts();
+    } else {
+      showMsg(msg, 'error', res.error || 'Could not create account.');
+    }
+  } catch(e) {
+    showMsg(msg, 'error', 'Server error. Please try again.');
+  }
+}
+
+function openChangeModal(username) {
+  pendingTarget = username;
+  document.getElementById('changeModalUser').textContent = 'Change password for: ' + username;
+  document.getElementById('newPassModal').value     = '';
+  document.getElementById('confirmPassModal').value = '';
+  document.getElementById('changeMsg').style.display = 'none';
+  document.getElementById('changeModal').classList.add('open');
+}
+
+function openDeleteModal(username) {
+  pendingTarget = username;
+  document.getElementById('deleteModalUser').textContent = 'Are you sure you want to delete "' + username + '"? This cannot be undone.';
+  document.getElementById('deleteModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('changeModal').classList.remove('open');
+  document.getElementById('deleteModal').classList.remove('open');
+  pendingTarget = null;
+}
+
+async function confirmChange() {
+  const newPass     = document.getElementById('newPassModal').value;
+  const confirmPass = document.getElementById('confirmPassModal').value;
+  const msg         = document.getElementById('changeMsg');
+  if (!newPass)               { showMsg(msg, 'error', 'Enter a new password.'); return; }
+  if (newPass.length < 6)     { showMsg(msg, 'error', 'Password must be at least 6 characters.'); return; }
+  if (newPass !== confirmPass) { showMsg(msg, 'error', 'Passwords do not match.'); return; }
+
+  try {
+    const res = await jsonp(SCRIPT_URL + '?action=changePassword&targetUsername=' + encodeURIComponent(pendingTarget) + '&newPassword=' + encodeURIComponent(newPass));
+    if (res.success) { closeModal(); } else { showMsg(msg, 'error', res.error || 'Could not update password.'); }
+  } catch(e) {
+    showMsg(msg, 'error', 'Server error. Please try again.');
+  }
+}
+
+async function confirmDelete() {
+  try {
+    const res = await jsonp(SCRIPT_URL + '?action=deleteAccount&targetUsername=' + encodeURIComponent(pendingTarget));
+    if (res.success) { closeModal(); loadAccounts(); }
+    else { alert(res.error || 'Could not delete account.'); }
+  } catch(e) {
+    alert('Server error. Please try again.');
+  }
+}
+
+function showMsg(el, type, text) {
+  el.className     = 'msg ' + type;
+  el.textContent   = text;
+  el.style.display = 'block';
+}
+</script>
+</body>
+</html>
