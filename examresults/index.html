@@ -200,7 +200,8 @@ async function archiveResult(i) {
   if (!confirm(`Archive result for ${s.name}?`)) return;
 
   try {
-    await fetch(SCRIPT_URL + '?action=archiveExamRow&row=' + s._row, { mode: 'no-cors' });
+    const archParams = new URLSearchParams({ action: 'archiveExamRow', row: String(s._row), actor: localStorage.getItem('bv_username') || 'unknown' });
+    await fetch(SCRIPT_URL + '?' + archParams.toString(), { mode: 'no-cors' });
     // Remove from local list
     submissions.splice(i, 1);
     sessionStorage.setItem('bv_exam_cache', JSON.stringify(submissions));
