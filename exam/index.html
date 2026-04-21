@@ -196,6 +196,7 @@ async function submitExam(timeUp=false) {
   const secs = (30 * 60 - timeLeft) % 60;
   const timeTaken = `${mins}m ${secs}s`;
 
+  // Stuur antwoorden naar GAS — GAS scoort, slaat op en stuurt Discord
   const params = new URLSearchParams({
     action:    'scoreExam',
     date:      new Date().toISOString(),
@@ -204,16 +205,7 @@ async function submitExam(timeUp=false) {
     timeTaken,
     timeUp:    timeUp ? '1' : '0'
   });
-
-  try {
-    const result = await jsonp(SCRIPT_URL + '?' + params.toString());
-    if (result.success) {
-      // Discord vanuit de browser — werkt altijd betrouwbaar
-      sendDiscordResult(name, email, ifc, result.score, result.max, result.pct, result.pass, timeTaken, timeUp, result.wrong);
-    }
-  } catch(e) {
-    console.warn('JSONP failed, data was likely saved by GAS:', e);
-  }
+  fetch(SCRIPT_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
 
   // Deelnemer ziet altijd de ingediend-melding, nooit de score
   showSubmitted();
@@ -229,47 +221,6 @@ function showSubmitted() {
   badge.className   = 'result-badge pass';
   document.getElementById('resultMsg').innerHTML =
     `<p>Your exam has been submitted to Brussels Virtual staff. You will be contacted shortly with your result.</p>`;
-}
-
-// JSONP: omzeilt CORS volledig
-function jsonp(url) {
-  return new Promise((resolve, reject) => {
-    const fn  = '_cb' + Date.now();
-    const s   = document.createElement('script');
-    const timer = setTimeout(() => { delete window[fn]; s.remove(); reject(new Error('Timeout')); }, 20000);
-    s.src     = url + '&callback=' + fn;
-    window[fn] = data => { clearTimeout(timer); delete window[fn]; s.remove(); resolve(data); };
-    s.onerror  = ()   => { clearTimeout(timer); delete window[fn]; s.remove(); reject(new Error('Load error')); };
-    document.head.appendChild(s);
-  });
-}
-
-// Discord notificatie vanuit de browser met volledige scoreinfo
-async function sendDiscordResult(name, email, ifc, score, max, pct, pass, timeTaken, timeUp, wrong) {
-  const WEBHOOK = 'https://discord.com/api/webhooks/1490322686243508224/Cu6z16cBjYOHuIjCAzh3V6vyO1kQmKqhBPZz0QS-zBCrhdWFzYAwE18VxpdU0QrfdWiS';
-  const fields = [
-    {name: 'Applicant',    value: name || '?',   inline: true},
-    {name: 'IFC',         value: ifc  || '?',   inline: true},
-    {name: 'Email',       value: email || '?',  inline: true},
-    {name: 'Score',       value: score + '/' + max + ' (' + pct + '%)', inline: true},
-    {name: 'Result',      value: pass ? 'PASSED ✅' : 'FAILED ❌', inline: true},
-    {name: 'Time used',   value: timeTaken, inline: true},
-    {name: 'Time expired',value: timeUp ? 'Yes ⏰' : 'No', inline: true},
-  ];
-  if (wrong) fields.push({name: 'Wrong Questions', value: wrong, inline: false});
-  await fetch(WEBHOOK, {
-    method:  'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      username: 'BV Exam System',
-      embeds: [{
-        title:     pass ? '✅ Exam Passed' : '❌ Exam Failed',
-        color:     pass ? 0x00c864 : 0xe1002a,
-        fields,
-        timestamp: new Date().toISOString()
-      }]
-    })
-  }).catch(() => {});
 }
 </script>
 </body>
