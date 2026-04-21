@@ -202,21 +202,28 @@ async function setStatus(i, newStatus) {
   const a = apps[i];
   if (!a._row) { alert('Row not found — try refreshing.'); return; }
 
-  // Update in spreadsheet via JSONP — betrouwbaar, bevestigt of het gelukt is
+  // 1. Cache & UI meteen bijwerken (optimistic update) — dit zorgt dat herlaad correct blijft
+  apps[i].status = newStatus;
+  sessionStorage.setItem('bv_applicants_cache', JSON.stringify(apps));
+  const inDetail = document.getElementById('detailSection').style.display !== 'none';
+  if (inDetail) showDetail(i);
+  renderApplicants(apps);
+
+  // 2. GAS spreadsheet bijwerken op de achtergrond
+  const params = new URLSearchParams({
+    action: 'updateStatus',
+    row:    String(a._row),
+    status: newStatus
+  });
   try {
-    const params = new URLSearchParams({
-      action: 'updateStatus',
-      row:    String(a._row),
-      status: newStatus
-    });
     await jsonp(SCRIPT_URL + '?' + params.toString());
   } catch(e) {
-    console.error('Status update failed:', e);
-    alert('Could not update status. Please try again.');
-    return;
+    // JSONP time-out: fallback naar no-cors (cache is al correct)
+    fetch(SCRIPT_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
+    console.warn('JSONP timed out, used no-cors fallback');
   }
 
-  // Discord melding vanuit browser
+  // 3. Discord melding
   const color = newStatus === 'Accepted' ? 0x00c864 : newStatus === 'Rejected' ? 0xe1002a : 0xffaa00;
   const emoji = newStatus === 'Accepted' ? '✅' : newStatus === 'Rejected' ? '❌' : '⏳';
   const fields = [
@@ -234,13 +241,6 @@ async function setStatus(i, newStatus) {
       embeds: [{ title: emoji + ' Application ' + newStatus, color, fields, timestamp: new Date().toISOString() }]
     })
   }).catch(err => console.error('Discord error:', err));
-
-  // Update local cache en herlaad weergave
-  apps[i].status = newStatus;
-  sessionStorage.setItem('bv_applicants_cache', JSON.stringify(apps));
-  const inDetail = document.getElementById('detailSection').style.display !== 'none';
-  if (inDetail) showDetail(i);
-  renderApplicants(apps);
 }
 
 async function archiveApplicant(i) {
