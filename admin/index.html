@@ -34,8 +34,8 @@ body{font-family:'Nunito Sans',sans-serif;min-height:100vh;background:radial-gra
 .btn-delete{background:rgba(225,0,42,0.1);border-color:rgba(225,0,42,0.3);color:#ff6680}
 .btn-delete:hover{background:rgba(225,0,42,0.25);border-color:rgba(225,0,42,0.6)}
 .add-form{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:32px}
-.form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.form-field{flex:1;min-width:140px}
+.form-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.form-field{min-width:0}
 .form-field label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:6px}
 .form-field input,.form-field select{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:10px 14px;color:var(--white);font-family:'Nunito Sans',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color .2s}
 .form-field input:focus,.form-field select:focus{border-color:rgba(225,0,42,0.5)}
@@ -104,14 +104,14 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
         <input type="text" id="newUser" placeholder="e.g. john_doe" autocomplete="off">
       </div>
       <div class="form-field">
+        <label>Display Name</label>
+        <input type="text" id="newDisplayName" placeholder="e.g. Thomas">
+      </div>
+      <div class="form-field">
         <label>Password</label>
         <input type="password" id="newPass" placeholder="••••••••" autocomplete="new-password">
       </div>
       <div class="form-field">
-        <label>Display Name (voornaam)</label>
-        <input type="text" id="newDisplayName" placeholder="e.g. Thomas">
-      </div>
-      <div class="form-field" style="max-width:160px">
         <label>Role</label>
         <select id="newRole">
           <option value="moderator">Moderator</option>
