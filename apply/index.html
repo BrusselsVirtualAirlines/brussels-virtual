@@ -77,7 +77,10 @@ footer{position:relative;text-align:center;padding:24px;border-top:1px solid rgb
   </div>
 
   <button class="btn-submit" id="submitBtn" onclick="submitForm()">Send Application</button>
-  <div class="msg success" id="successMsg">✓ Application sent! We'll be in touch soon.</div>
+  <div class="msg success" id="successMsg" style="line-height:1.7">
+    ✓ <strong>Application sent!</strong> We'll be in touch soon.<br>
+    <span style="font-size:11px;opacity:0.85">If you haven't heard back within <strong>3 days</strong>, please reach out to us on the Infinite Flight Community — send a message to <strong>Brussels Virtual</strong>.</span>
+  </div>
   <div class="msg error" id="errorMsg">✗ Something went wrong. Please try again.</div>
 </div>
 
